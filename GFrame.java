@@ -60,18 +60,28 @@ public class GFrame extends JFrame {
         themeSound.setVolume(setting.MusicSound);
 
         class MyWindowListener extends WindowAdapter {
-
             @Override
             public void windowClosing(WindowEvent e) {
+                // This windowClosing is when playing game, user close the windows.
+                // When this trigger, the game close and the program is finished.
+                
+                GameRunning = false;
                 themeSound.stop();
+                
                 for (Thread a : allThread) {
-                    while (a.isAlive()) {
-                        a.interrupt();
-                    }
-                    if (allThread.isEmpty()) {
-                        break;
+                    a.interrupt();
+                }
+                
+                for (Thread thread : allThread) {
+                    try {
+                        thread.join(); // Wait for thread termination
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
                     }
                 }
+                
+                allThread.clear(); // Cleanup thread list
+                dispose(); // Close the game window
             }
         }
         //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -122,7 +132,8 @@ public class GFrame extends JFrame {
         repaint();
         Thread charThread = new Thread() {
             public void run() {
-                while (this.isAlive()) {
+                //while (this.isAlive()) {
+                while (GameRunning) {
                     if (Thread.currentThread().isInterrupted()) {
                         break;
                     }
@@ -136,6 +147,7 @@ public class GFrame extends JFrame {
             } // end run
         }; // end thread creation
         charThread.start();
+        allThread.add(charThread);
     }
 
     public void setPlatformRunnnerThread() {
@@ -177,7 +189,6 @@ public class GFrame extends JFrame {
         Thread ptThread = new Thread() {
             public void run() {
                 
-
             } // end run
         }; // end thread creation
         ptThread.start();
@@ -190,22 +201,24 @@ public class GFrame extends JFrame {
             public void run() {
                 while (GameRunning) {
                     if (charLabel.isMove()){
-                       Bullet bullet = new Bullet();
-                    drawpane.add(bullet);
-                    bullets.add(bullet);
-                    drawpane.repaint();
-                    System.out.println("Bullet position: " + bullet.getX() + ", " + bullet.getY()); 
+                        Bullet bullet = new Bullet();
+                        drawpane.add(bullet);
+                        bullets.add(bullet);
+                        drawpane.repaint();
+                        System.out.println("Bullet position: " + bullet.getX() + ", " + bullet.getY()); 
                     }
                     
                     try {
                         Thread.sleep(10000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        break;
                     }
                 }
             }
         };
         CreateBulletThread.start();
+        allThread.add(CreateBulletThread);
 
         Thread BulletFallThread = new Thread() {
             @Override
@@ -236,13 +249,55 @@ public class GFrame extends JFrame {
             }
         };
         BulletFallThread.start();
+        allThread.add(BulletFallThread);
 
     }
 
     public void GameOver() {
         GameRunning = false;
-        JOptionPane.showMessageDialog(this, "Game Over", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        
         themeSound.stop();
+        
+        for (Thread thread : allThread) {
+            if (thread.isAlive()) {
+                thread.interrupt();
+            }
+        }
+        
+        GameOverDialog();
+    }
+    
+    public void GameOverDialog() {
+        // Create a modal JDialog
+        JDialog gameOverDialog = new JDialog(this, "Game Over", true);
+        gameOverDialog.setLayout(new BorderLayout());
+        gameOverDialog.setSize(300, 150);
+        gameOverDialog.setLocationRelativeTo(this); // Center on the parent frame
+        
+        JLabel message = new JLabel("Game Over. Click OK to return to the menu.", JLabel.CENTER);
+        JButton okButton = new JButton("OK");
+        
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Can add something to show on the game over down here
+                // Add score
+
+                gameOverDialog.dispose(); // Close the dialog
+                dispose(); // Close the game frame
+                game.openMenu(); // Open the menu
+            }
+        });
+        
+        // Layout components
+        gameOverDialog.add(message, BorderLayout.CENTER);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(okButton);
+        gameOverDialog.add(buttonPanel, BorderLayout.SOUTH);
+
+        // Show the dialog
+        gameOverDialog.setVisible(true);
+        
     }
     
     public void setHeartPanel() {
