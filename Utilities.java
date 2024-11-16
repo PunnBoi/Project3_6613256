@@ -27,7 +27,11 @@ interface MyConstants
     static final String FILE_CHAR_RUN_L         = PATH + "char_run_left.gif";
     static final String FILE_CHAR_JUMP_R        = PATH + "char_jump_right.png";
     static final String FILE_CHAR_JUMP_L        = PATH + "char_jump_left.png";
-    static final String FILE_Bullet             = PATH + "bullet.png";
+    static final String FILE_BULLET             = PATH + "bullet.png";
+    static final String FILE_HEART_0            = PATH + "heart_0.png";
+    static final String FILE_HEART_1            = PATH + "heart_1.png";
+    static final String FILE_HEART_2            = PATH + "heart_2.png";
+    static final String FILE_HEART_3            = PATH + "heart_3.png";
     
     //static final String FILE_SOUND       = PATH + "sound.wav";
     static final String sFILE_THEME      = PATH + "theme.wav";
@@ -41,8 +45,8 @@ interface MyConstants
     static final int CHARWIDTH   = 64;
     static final int CHARHEIGHT  = 64;
     
-    static final int BULLWIDTH   = 20;
-    static final int BULLHEIGHT  = 20;
+    static final int BULLWIDTH   = 40;
+    static final int BULLHEIGHT  = 40;
 }
 
 //modify this from setting menu
