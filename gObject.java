@@ -197,6 +197,8 @@ class CharLabel extends JLabel {
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
+
 class Bullet extends JLabel {
 
     private int curX, curY = 0, speed = 10;
@@ -235,4 +237,38 @@ class Bullet extends JLabel {
         return a;
     }
 
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+class Platform extends JLabel {
+    private int curX, curY;
+    private int width, height;
+    
+    public Platform(int x, int y, int width, int height) {
+        this.curX = x;
+        this.curY = y;
+        this.width = width;
+        this.height = height;
+
+        // Set platform image
+
+        setBounds(curX, curY, width, height);
+    }
+
+    public int getCurX() {
+        return curX;
+    }
+
+    public int getCurY() {
+        return curY;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }
