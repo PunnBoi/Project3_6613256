@@ -21,6 +21,17 @@ interface MyConstants
     static final String PATH             = "src/main/java/Project3_6613256/resources/";
     //static final String FILE_SAMPLE          = PATH + "Example.jpg";
     static final String FILE_BG                 = PATH + "gBG.jpg";
+    static final String FILE_MAIN_BG            = PATH + "background.gif";
+    static final String FILE_MAIN_BG2           = PATH + "background2.gif";
+    static final String FILE_BUTTON1            = PATH + "pixil-frame-0.png";
+    static final String FILE_BUTTON_START_NORMAL       = PATH + "START_BUTTON.png";
+    static final String FILE_BUTTON_TUTORIAL_NORMAL    = PATH + "TUTORIAL_BUTTON.png";
+    static final String FILE_BUTTON_CREDITS_NORMAL     = PATH + "CREDITS_BUTTON.png";
+    static final String FILE_BUTTON_QUIT_NORMAL        = PATH + "QUIT_BUTTON.png";
+    static final String FILE_BUTTON_START_PRESSED       = PATH + "START_BUTTON_PRESSED.png";
+    static final String FILE_BUTTON_TUTORIAL_PRESSED    = PATH + "TUTORIAL_BUTTON_PRESSED.png";
+    static final String FILE_BUTTON_CREDITS_PRESSED     = PATH + "CREDITS_BUTTON_PRESSED.png";
+    static final String FILE_BUTTON_QUIT_PRESSED        = PATH + "QUIT_BUTTON_PRESSED.png";
     static final String FILE_CHAR_IDLE_R        = PATH + "char_idle_right.png";
     static final String FILE_CHAR_IDLE_L        = PATH + "char_idle_left.png";
     static final String FILE_CHAR_RUN_R         = PATH + "char_run_right.gif";
