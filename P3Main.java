@@ -22,8 +22,8 @@ public class P3Main{
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //new Game();
-        new MMenu();
+        new Game();
+        //new MMenu();
     }
     
 }

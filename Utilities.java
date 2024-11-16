@@ -18,31 +18,35 @@ interface MyConstants
 {
     //----- Resource files
     //      Don't forget to change path
-    static final String PATH             = "src/main/java/Project3_6613256/resources/";
+    static final String PATH                            = "src/main/java/Project3_6613256/resources/";
     //static final String FILE_SAMPLE          = PATH + "Example.jpg";
-    static final String FILE_BG                 = PATH + "gBG.jpg";
-    static final String FILE_MAIN_BG            = PATH + "background.gif";
-    static final String FILE_MAIN_BG2           = PATH + "background2.gif";
-    static final String FILE_BUTTON1            = PATH + "pixil-frame-0.png";
-    static final String FILE_BUTTON_START_NORMAL       = PATH + "START_BUTTON.png";
-    static final String FILE_BUTTON_TUTORIAL_NORMAL    = PATH + "TUTORIAL_BUTTON.png";
-    static final String FILE_BUTTON_CREDITS_NORMAL     = PATH + "CREDITS_BUTTON.png";
-    static final String FILE_BUTTON_QUIT_NORMAL        = PATH + "QUIT_BUTTON.png";
+    static final String FILE_BG                         = PATH + "gBG.jpg";
+    static final String FILE_MAIN_BG                    = PATH + "background.gif";
+    static final String FILE_MAIN_BG2                   = PATH + "background2.gif";
+    static final String FILE_BUTTON1                    = PATH + "pixil-frame-0.png";
+    static final String FILE_BUTTON_START_NORMAL        = PATH + "START_BUTTON.png";
+    static final String FILE_BUTTON_TUTORIAL_NORMAL     = PATH + "TUTORIAL_BUTTON.png";
+    static final String FILE_BUTTON_CREDITS_NORMAL      = PATH + "CREDITS_BUTTON.png";
+    static final String FILE_BUTTON_QUIT_NORMAL         = PATH + "QUIT_BUTTON.png";
     static final String FILE_BUTTON_START_PRESSED       = PATH + "START_BUTTON_PRESSED.png";
     static final String FILE_BUTTON_TUTORIAL_PRESSED    = PATH + "TUTORIAL_BUTTON_PRESSED.png";
     static final String FILE_BUTTON_CREDITS_PRESSED     = PATH + "CREDITS_BUTTON_PRESSED.png";
     static final String FILE_BUTTON_QUIT_PRESSED        = PATH + "QUIT_BUTTON_PRESSED.png";
-    static final String FILE_CHAR_IDLE_R        = PATH + "char_idle_right.png";
-    static final String FILE_CHAR_IDLE_L        = PATH + "char_idle_left.png";
-    static final String FILE_CHAR_RUN_R         = PATH + "char_run_right.gif";
-    static final String FILE_CHAR_RUN_L         = PATH + "char_run_left.gif";
-    static final String FILE_CHAR_JUMP_R        = PATH + "char_jump_right.png";
-    static final String FILE_CHAR_JUMP_L        = PATH + "char_jump_left.png";
-    static final String FILE_Bullet             = PATH + "bullet.png";
+    static final String FILE_CHAR_IDLE_R                = PATH + "char_idle_right.png";
+    static final String FILE_CHAR_IDLE_L                = PATH + "char_idle_left.png";
+    static final String FILE_CHAR_RUN_R                 = PATH + "char_run_right.gif";
+    static final String FILE_CHAR_RUN_L                 = PATH + "char_run_left.gif";
+    static final String FILE_CHAR_JUMP_R                = PATH + "char_jump_right.png";
+    static final String FILE_CHAR_JUMP_L                = PATH + "char_jump_left.png";
+    static final String FILE_BULLET                     = PATH + "bullet.png";
+    static final String FILE_HEART_0                    = PATH + "heart_0.png";
+    static final String FILE_HEART_1                    = PATH + "heart_1.png";
+    static final String FILE_HEART_2                    = PATH + "heart_2.png";
+    static final String FILE_HEART_3                    = PATH + "heart_3.png";
     
     //static final String FILE_SOUND       = PATH + "sound.wav";
-    static final String sFILE_THEME      = PATH + "theme.wav";
-    static final String sFILE_JUMP       = PATH + "jumpsound.wav";
+    static final String sFILE_THEME                     = PATH + "theme.wav";
+    static final String sFILE_JUMP                      = PATH + "jumpsound.wav";
     //sizes
     static final int FRAMEWIDTH  = 1366;
     static final int FRAMEHEIGHT = 768;

@@ -12,7 +12,7 @@ class MMenu extends JFrame {
     private JLabel              drawpane;
     private JButton             startButton, ttrButton, creditButton, exitButton;
     private MyImageIcon         backgroundImg,buttonImg; 
-    
+    private Game                game;
     
     private int framewidth  = MyConstants.FRAMEWIDTH;
     private int frameheight = MyConstants.FRAMEHEIGHT;
@@ -27,7 +27,7 @@ class MMenu extends JFrame {
         
     }*/
     
-    public MMenu()
+    public MMenu(Game g)
     {
         setTitle("Project3");
 	setSize(framewidth, frameheight); 
@@ -38,6 +38,8 @@ class MMenu extends JFrame {
         currentFrame = this;
         contentpane = (JPanel)getContentPane();
 	contentpane.setLayout( new BorderLayout() );    
+        
+        game = g;
         
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setLayout(null);  // Set null layout to manually position components
@@ -103,6 +105,9 @@ class MMenu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(e + " button clicked!");
+                dispose();
+                setFocusable(false);
+		game.openGame();
             }
         });
         
