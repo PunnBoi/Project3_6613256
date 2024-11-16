@@ -122,7 +122,7 @@ class CharLabel extends JLabel {
         curX += dirX * speed;
         if (curX < 0) {
             curX = 0;
-        } else if (curX > MyConstants.FRAMEWIDTH) {
+        } else if (curX+width > MyConstants.FRAMEWIDTH) {
             curX = MyConstants.FRAMEWIDTH - width;
         }
         if (!grounded) {
@@ -224,6 +224,7 @@ class Bullet extends JLabel {
             isActive = false;
         }
         setLocation(curX, curY);
+        repaint();
     }
     
     public boolean getIsActive(){

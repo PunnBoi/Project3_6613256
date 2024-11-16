@@ -98,7 +98,10 @@ public class GFrame extends JFrame {
         moveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                themeSound.stop();
+                dispose();
+                setFocusable(false);
+                game.openMenu();
             }
         });
 
@@ -156,6 +159,7 @@ public class GFrame extends JFrame {
                     if (Thread.currentThread().isInterrupted()) {
                         break;
                     }
+                    setBulletThread();
                     System.out.println("start spawn platform randomly");
                     try {
                         Thread.sleep(2000);
