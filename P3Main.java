@@ -23,6 +23,7 @@ public class P3Main{
      */
     public static void main(String[] args) {
         new Game();
+        //new MMenu();
     }
     
 }
