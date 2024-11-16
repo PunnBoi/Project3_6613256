@@ -176,6 +176,7 @@ public class GFrame extends JFrame {
     public void setPlatformThread() {
         Thread ptThread = new Thread() {
             public void run() {
+                
 
             } // end run
         }; // end thread creation

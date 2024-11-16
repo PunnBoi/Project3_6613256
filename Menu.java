@@ -107,7 +107,7 @@ class Menu extends JFrame {
                 System.out.println(e + " button clicked!");
                 dispose();
                 setFocusable(false);
-		game.openGame();
+		game.openGame(); // To start the game.
             }
         });
         
@@ -115,6 +115,8 @@ class Menu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(e + " button clicked!");
+                // Write tutoreal down here...
+                
             }
             
         });
@@ -123,6 +125,7 @@ class Menu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(e + " button clicked!");
+                // Write credit down here...
             }
         });
         
