@@ -257,7 +257,7 @@ public class GFrame extends JFrame {
         GameRunning = false;
         
         themeSound.stop();
-        
+        setFocusable(false);
         for (Thread thread : allThread) {
             if (thread.isAlive()) {
                 thread.interrupt();
@@ -277,6 +277,9 @@ public class GFrame extends JFrame {
         JLabel message = new JLabel("Game Over. Click OK to return to the menu.", JLabel.CENTER);
         JButton okButton = new JButton("OK");
         
+        setFocusable(true);
+        requestFocusInWindow();
+        
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -284,6 +287,7 @@ public class GFrame extends JFrame {
                 // Add score
 
                 gameOverDialog.dispose(); // Close the dialog
+                setFocusable(false);
                 dispose(); // Close the game frame
                 game.openMenu(); // Open the menu
             }
