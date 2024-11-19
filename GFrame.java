@@ -28,6 +28,13 @@ public class GFrame extends JFrame {
     private ArrayList<Thread> allThread = new ArrayList<>();
     
     private ArrayList<Bullet> bullets = new ArrayList<>();
+    
+    private ArrayList<Platform> platforms = new ArrayList<>();
+    
+    public ArrayList<Platform> getPlatforms() {
+        return platforms;
+    }
+    
     private boolean GameRunning = true;
     
     private final int MAX_HP = 3;
@@ -88,7 +95,8 @@ public class GFrame extends JFrame {
         addWindowListener(new MyWindowListener());
 
         setGPanel();
-        setBulletThread();
+        setPlatformThread();
+        setBulletThread(); 
     }
 
     public void setGPanel() {
@@ -167,11 +175,12 @@ public class GFrame extends JFrame {
                 if (!flag) {
                     themeSound.playLoop();
                 }
-                while (true) {
+                while (GameRunning) {
                     if (Thread.currentThread().isInterrupted()) {
                         break;
                     }
                     setBulletThread();
+                    //setPlatformThread();
                     System.out.println("start spawn platform randomly");
                     try {
                         Thread.sleep(2000);
@@ -188,11 +197,49 @@ public class GFrame extends JFrame {
     public void setPlatformThread() {
         Thread ptThread = new Thread() {
             public void run() {
-                
+                while(GameRunning) {
+                    Random rand = new Random();
+                    int xPos = rand.nextInt(0, MyConstants.FRAMEWIDTH - 100); // Random x position
+                    int yPos = rand.nextInt(100, MyConstants.GROUND_Y - 50); // Random y position
+                    Platform newPlatform = new Platform(xPos, yPos);
+                    platforms.add(newPlatform);
+                    drawpane.add(newPlatform);
+                    
+                    drawpane.repaint();
+                    
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        break;
+                    }
+                }
             } // end run
         }; // end thread creation
         ptThread.start();
-
+        allThread.add(ptThread);
+        
+        
+        Thread ptFallThread = new Thread() {
+            @Override
+            public void run() {
+                while(GameRunning) {
+                    for (Platform platform : platforms) {
+                        platform.moveDown();
+                        System.out.println("Platform position: " + platform.getCurY());
+                    }
+                }
+                drawpane.repaint();
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        ptFallThread.start();
+        allThread.add(ptFallThread);
+        
     }
 
     public void setBulletThread() {
@@ -204,6 +251,7 @@ public class GFrame extends JFrame {
                         Bullet bullet = new Bullet();
                         drawpane.add(bullet);
                         bullets.add(bullet);
+                        
                         drawpane.repaint();
                         System.out.println("Bullet position: " + bullet.getX() + ", " + bullet.getY()); 
                     }
@@ -257,7 +305,7 @@ public class GFrame extends JFrame {
         GameRunning = false;
         
         themeSound.stop();
-        setFocusable(false);
+        setFocusable(false); 
         for (Thread thread : allThread) {
             if (thread.isAlive()) {
                 thread.interrupt();

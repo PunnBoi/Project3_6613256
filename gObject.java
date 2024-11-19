@@ -4,6 +4,7 @@
  */
 package Project3_6613256;
 
+import java.awt.Color;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
@@ -31,6 +32,7 @@ class CharLabel extends JLabel {
     private GFrame parent;
 
     private JLabel GroundCheck;
+    private Object gFrame;
 
     public CharLabel(GFrame parent) {
         idleImgR = new MyImageIcon(MyConstants.FILE_CHAR_IDLE_R).resize(width, height);
@@ -125,9 +127,29 @@ class CharLabel extends JLabel {
         } else if (curX+width > MyConstants.FRAMEWIDTH) {
             curX = MyConstants.FRAMEWIDTH - width;
         }
+        
+        // Apply gravity and check for platform collisions
         if (!grounded) {
             curY += dirY * Jpow;
         }
+        
+        for (Platform p : parent.getPlatforms()) {
+            if (curX + width > p.getCurX() && curX < p.getCurX() + p.getWidth()) {
+                // Check if character is falling and just above the platform
+                if (curY + height <= p.getCurY() && curY + height + Jpow >= p.getCurY() && !grounded) {                  
+                    grounded = true;
+                    dirY = 0;  // Stop downward movement
+                    break;
+                }
+                
+                if(curX + width <= p.getCurX() && curX + width >= p.getCurX() && grounded) {
+                    grounded = false;
+                    dirY = 1;
+                    break;
+                }
+            }
+        }
+        
         if (curY + height > MyConstants.GROUND_Y) {
             curY = MyConstants.GROUND_Y - height;
             grounded = true;
@@ -218,10 +240,9 @@ class Bullet extends JLabel {
     }
 
     public void move() {
-        if (!isActive) {
-        return;
-    }
+        if (!isActive) return;
         curY += speed;
+        
         if (curY > MyConstants.FRAMEHEIGHT){
             isActive = false;
         }
@@ -243,17 +264,34 @@ class Bullet extends JLabel {
 
 class Platform extends JLabel {
     private int curX, curY;
-    private int width, height;
+    private int width = 100, height = 20;
+    private int speed = 2;
+    private boolean isActive;
     
-    public Platform(int x, int y, int width, int height) {
+    public Platform(int x, int y) {
         this.curX = x;
         this.curY = y;
-        this.width = width;
-        this.height = height;
+        this.isActive = true;
 
         // Set platform image
+        setOpaque(true); 
+        setBackground(Color.BLUE);
 
         setBounds(curX, curY, width, height);
+    }
+    
+    public void moveDown() {
+        if (!isActive) return;
+        
+        if (curY > MyConstants.FRAMEHEIGHT) {
+            isActive = false;
+        }
+        setLocation(curX, curY);
+        repaint();
+    }
+    
+    public boolean isActive() {
+        return isActive;
     }
 
     public int getCurX() {
