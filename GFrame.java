@@ -179,7 +179,7 @@ public class GFrame extends JFrame {
                     if (Thread.currentThread().isInterrupted()) {
                         break;
                     }
-                    setBulletThread();
+                    //setBulletThread();
                     //setPlatformThread();
                     System.out.println("start spawn platform randomly");
                     try {
@@ -217,7 +217,7 @@ public class GFrame extends JFrame {
             } // end run
         }; // end thread creation
         ptThread.start();
-        allThread.add(ptThread);
+        //allThread.add(ptThread);
         
         
         Thread ptFallThread = new Thread() {
@@ -238,7 +238,7 @@ public class GFrame extends JFrame {
             }
         };
         ptFallThread.start();
-        allThread.add(ptFallThread);
+        //allThread.add(ptFallThread);
         
     }
 
@@ -257,7 +257,7 @@ public class GFrame extends JFrame {
                     }
                     
                     try {
-                        Thread.sleep(10000);
+                        Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                         break;
@@ -266,7 +266,7 @@ public class GFrame extends JFrame {
             }
         };
         CreateBulletThread.start();
-        allThread.add(CreateBulletThread);
+        //allThread.add(CreateBulletThread);
 
         Thread BulletFallThread = new Thread() {
             @Override
@@ -297,7 +297,7 @@ public class GFrame extends JFrame {
             }
         };
         BulletFallThread.start();
-        allThread.add(BulletFallThread);
+        //allThread.add(BulletFallThread);
 
     }
 

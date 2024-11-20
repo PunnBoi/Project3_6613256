@@ -56,8 +56,8 @@ interface MyConstants
     static final int CHARWIDTH   = 64;
     static final int CHARHEIGHT  = 64;
     
-    static final int BULLWIDTH   = 20;
-    static final int BULLHEIGHT  = 20;
+    static final int BULLWIDTH   = 40;
+    static final int BULLHEIGHT  = 40;
 }
 
 //modify this from setting menu
