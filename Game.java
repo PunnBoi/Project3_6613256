@@ -7,8 +7,11 @@ public class Game {
     private Menu menu;
     
     private static int mSound;
+    private MySoundEffect themeSound;
     
     public Game(){
+        themeSound = new MySoundEffect(MyConstants.sFILE_THEME);
+        themeSound.playLoop();
         menu = new Menu(this);
     }
     
@@ -17,5 +20,10 @@ public class Game {
     }
     public void openMenu(){
         menu = new Menu(this);
+        
+    }
+    
+    public MySoundEffect getThemeSound() {
+        return themeSound;
     }
 }

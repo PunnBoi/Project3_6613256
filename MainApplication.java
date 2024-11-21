@@ -16,7 +16,7 @@ import javax.swing.*;
 6613274 Sujira Duangkaewnapalai
  */
 
-public class P3Main{
+public class MainApplication{
 
     /**
      * @param args the command line arguments

@@ -48,6 +48,7 @@ public class GFrame extends JFrame {
     MyConstants.FILE_HEART_2,  // 2 hearts image
     MyConstants.FILE_HEART_3 
 };
+    
 
     public GFrame(Game g) {
         requestFocusInWindow();
@@ -65,6 +66,7 @@ public class GFrame extends JFrame {
         requestFocusInWindow();
 
         themeSound = new MySoundEffect(MyConstants.sFILE_THEME);
+//        themeSound.playLoop();
         themeSound.setVolume(setting.MusicSound);
         
         class MyWindowListener extends WindowAdapter {
@@ -96,8 +98,7 @@ public class GFrame extends JFrame {
         addWindowListener(new MyWindowListener());
 
         setGPanel();
-        //setPlatformThread();
-        //setBulletThread(); 
+        setBulletThread(); 
     }
 
     public void setGPanel() {
@@ -174,7 +175,7 @@ public class GFrame extends JFrame {
                     }
                 }
                 if (!flag) {
-                    themeSound.playLoop();
+                    //themeSound.playLoop();
                 }
                 
                 setPlatform();// create the platform here...
@@ -340,7 +341,7 @@ public class GFrame extends JFrame {
             }
         };
         BulletFallThread.start();
-        //allThread.add(BulletFallThread);
+//        allThread.add(BulletFallThread);
 
     }
 
