@@ -311,7 +311,7 @@ class Platform extends JLabel {
         int cX = character.getCharCurX();
         int cY = character.getCharCurY(); 
         
-        // chech if character is too high, then move the platform down.
+        // Check if character is too high, then move the platform down.
         // If the platform is moving down, the charactor needs to moves down to.
         // For that reason, We need to create the method on the charactor to change it.
         
