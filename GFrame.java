@@ -29,8 +29,9 @@ public class GFrame extends JFrame {
     
     private ArrayList<Bullet> bullets = new ArrayList<>();
     
-    private ArrayList<Platform> platforms = new ArrayList<>();
+    private ArrayList<Platform> platforms = new ArrayList<>(); 
     
+    // This is for platform ground check
     public ArrayList<Platform> getPlatforms() {
         return platforms;
     }
@@ -51,7 +52,7 @@ public class GFrame extends JFrame {
     public GFrame(Game g) {
         requestFocusInWindow();
         game = g;
-        setTitle("Test Game");
+        setTitle("Test Game");// Change this title when hava a game name
         setSize(framewidth, frameheight);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -65,7 +66,7 @@ public class GFrame extends JFrame {
 
         themeSound = new MySoundEffect(MyConstants.sFILE_THEME);
         themeSound.setVolume(setting.MusicSound);
-
+        
         class MyWindowListener extends WindowAdapter {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -95,8 +96,8 @@ public class GFrame extends JFrame {
         addWindowListener(new MyWindowListener());
 
         setGPanel();
-        setPlatformThread();
-        setBulletThread(); 
+        //setPlatformThread();
+        //setBulletThread(); 
     }
 
     public void setGPanel() {
@@ -175,13 +176,16 @@ public class GFrame extends JFrame {
                 if (!flag) {
                     themeSound.playLoop();
                 }
+                
+                setPlatform();// create the platform here...
+                
                 while (GameRunning) {
                     if (Thread.currentThread().isInterrupted()) {
                         break;
                     }
                     setBulletThread();
                     //setPlatformThread();
-                    System.out.println("start spawn platform randomly");
+                    System.out.println("This thread is currnetly running!");
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
@@ -193,11 +197,12 @@ public class GFrame extends JFrame {
         }; // end thread creation
         ptrThread.start();
     }
-
+ 
+    /*
     public void setPlatformThread() {
         Thread ptThread = new Thread() {
             public void run() {
-                while(GameRunning) {
+                for (int i = 0; i < 20; i++) {
                     Random rand = new Random();
                     int xPos = rand.nextInt(0, MyConstants.FRAMEWIDTH - 100); // Random x position
                     int yPos = rand.nextInt(100, MyConstants.GROUND_Y - 50); // Random y position
@@ -241,7 +246,45 @@ public class GFrame extends JFrame {
         allThread.add(ptFallThread);
         
     }
+    */
+    
+    public void setPlatform() {
+        for (int i = 0; i < 20; i++) {
+            // Need to create the platform in Y axis a little bit far apart.
+            // Could just define the zone of the Y axis that the platform can generate.
+            // No need to change the move part to behave like the generate part. 
+            // Because We already initialize the space between them.
+            Random rand = new Random();
+            int xPos = rand.nextInt(0, MyConstants.FRAMEWIDTH - 100); // Random x position
+            int yPos = rand.nextInt(100, MyConstants.GROUND_Y - 50); // Random y position
+            Platform newPlatform = new Platform(xPos, yPos, charLabel);
+            platforms.add(newPlatform);
+            drawpane.add(newPlatform);
 
+            drawpane.repaint();
+        } 
+        
+        Thread ptFallThread = new Thread() {
+            @Override
+            public void run() {
+                while (GameRunning) {
+                    for (Platform platform : platforms) {
+                        platform.moveDown();
+                        System.out.println("Platform position: " + platform.getCurY());
+                    }
+                }
+                drawpane.repaint();
+                try {
+                    Thread.sleep(50000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        ptFallThread.start();
+        allThread.add(ptFallThread);
+    }
+    
     public void setBulletThread() {
         Thread CreateBulletThread = new Thread() {
             @Override

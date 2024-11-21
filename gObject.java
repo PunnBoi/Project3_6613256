@@ -61,6 +61,14 @@ class CharLabel extends JLabel {
     public boolean isGrounded() {
         return grounded;
     }
+       
+    public int getCharCurX() {
+        return curX;
+    }
+
+    public int getCharCurY() {
+        return curY;
+    }
 
     public JLabel getGCheck() {
         return GroundCheck;
@@ -121,6 +129,7 @@ class CharLabel extends JLabel {
     }
 
     public void move() {
+        // FIX GRAVITY PROBLEM(might use another method to check the gravity alone).
         curX += dirX * speed;
         if (curX < 0) {
             curX = 0;
@@ -133,23 +142,34 @@ class CharLabel extends JLabel {
             curY += dirY * Jpow;
         }
         
+        boolean onAnyPlatform = false;
+
         for (Platform p : parent.getPlatforms()) {
-            if (curX + width > p.getCurX() && curX < p.getCurX() + p.getWidth()) {
-                // Check if character is falling and just above the platform
-                if (curY + height <= p.getCurY() && curY + height + Jpow >= p.getCurY() && !grounded) {                  
-                    grounded = true;
-                    dirY = 0;  // Stop downward movement
-                    break;
-                }
-                
-                if(curX + width <= p.getCurX() && curX + width >= p.getCurX() && grounded) {
-                    grounded = false;
-                    dirY = 1;
-                    break;
-                }
+            // Check horizontal overlap
+            boolean horizontallyAligned = curX + width > p.getCurX() && curX < p.getCurX() + p.getWidth();
+
+            // Check vertical alignment (just above the platform)
+            boolean abovePlatform = curY + height <= p.getCurY() && curY + height + Jpow >= p.getCurY();
+
+            if (horizontallyAligned && abovePlatform) {
+                onAnyPlatform = true;
+                grounded = true;  // The character is on a platform
+                dirY = 0;         // Stop downward movement
+                break;
             }
         }
+
+        // If not on any platform, character is falling
         
+        // Need to fix the gravity problem
+        
+        if (!onAnyPlatform && grounded) {
+        //if (grounded) {
+            grounded = false;
+            dirY = 1; // Start downward movement
+        }
+        
+        // Gravity check
         if (curY + height > MyConstants.GROUND_Y) {
             curY = MyConstants.GROUND_Y - height;
             grounded = true;
@@ -264,34 +284,40 @@ class Bullet extends JLabel {
 
 class Platform extends JLabel {
     private int curX, curY;
-    private int width = 100, height = 20;
+    private int width = 200, height = 15;
     private int speed = 2;
-    private boolean isActive;
+
+    private CharLabel character;
     
-    public Platform(int x, int y) {
+    public Platform(int x, int y, CharLabel charactor) {
         this.curX = x;
         this.curY = y;
-        this.isActive = true;
+        this.character = character;
 
         // Set platform image
         setOpaque(true); 
-        setBackground(Color.BLUE);
+        setBackground(Color.LIGHT_GRAY);
 
         setBounds(curX, curY, width, height);
     }
     
-    public void moveDown() {
-        if (!isActive) return;
-        
+    public void moveDown() {  
         if (curY > MyConstants.FRAMEHEIGHT) {
-            isActive = false;
+            Random random = new Random();
+            curY = 0; // Reset platform to the top
+            curX = random.nextInt(0, MyConstants.FRAMEWIDTH - 100);
         }
+        
+        int cX = character.getCharCurX();
+        int cY = character.getCharCurY(); 
+        
+        // chech if character is too high, then move the platform down.
+        // If the platform is moving down, the charactor needs to moves down to.
+        // For that reason, We need to create the method on the charactor to change it.
+        
+        //curY += speed;
         setLocation(curX, curY);
         repaint();
-    }
-    
-    public boolean isActive() {
-        return isActive;
     }
 
     public int getCurX() {
@@ -310,3 +336,6 @@ class Platform extends JLabel {
         return height;
     }
 }
+
+// Create a ground class for the start of the game
+
