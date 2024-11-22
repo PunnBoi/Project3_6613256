@@ -20,7 +20,6 @@ class Menu extends JFrame {
     private int btwidth  = 300;
     private int btheight = 50;
     
-    
     /*public static void main(String[] args) {
         
         Menu menu = new Menu();
@@ -127,7 +126,9 @@ class Menu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(e + " button clicked!");
-                Setting setting = new Setting();
+                Setting setting = new Setting(game);
+                dispose();
+                setFocusable(false);
             }
         });
         

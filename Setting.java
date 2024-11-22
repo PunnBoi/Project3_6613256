@@ -26,7 +26,7 @@ class Setting extends JFrame {
     private int btwidth  = 300;
     private int btheight = 50;
     
-    public Setting()
+    public Setting(Game g)
     {
         setTitle("Setting");
 	setSize(framewidth, frameheight); 
@@ -37,6 +37,8 @@ class Setting extends JFrame {
         currentFrame = this;
         contentpane = (JPanel)getContentPane();
 	contentpane.setLayout( new BorderLayout() );    
+        
+        game = g;
         
         try
 	{
@@ -201,8 +203,9 @@ class Setting extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(e + " button clicked!");
-                currentFrame.dispose(); // Close settings frame
+                dispose();
                 setFocusable(false);
+                game.openMenu();
             }
         });
         
