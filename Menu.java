@@ -49,6 +49,8 @@ class Menu extends JFrame {
         AddTitleComponents(layeredPane);
         AddButtonComponents(layeredPane);
         
+        
+        
     }
     
     public void AddBackgroundComponents(JLayeredPane layeredPane)
@@ -125,7 +127,7 @@ class Menu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(e + " button clicked!");
-                // Write credit down here...
+                Setting setting = new Setting();
             }
         });
         
