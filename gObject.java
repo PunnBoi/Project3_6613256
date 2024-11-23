@@ -69,6 +69,10 @@ class CharLabel extends JLabel {
     public int getCharCurY() {
         return curY;
     }
+    
+    public void repositionY(int y) {
+        curY = y;
+    }
 
     public JLabel getGCheck() {
         return GroundCheck;
@@ -284,7 +288,7 @@ class Bullet extends JLabel {
 
 class Platform extends JLabel {
     private int curX, curY;
-    private int width = 200, height = 15;
+    private int width = 150, height = 15;
     private int speed = 2;
 
     private CharLabel character;
@@ -314,6 +318,11 @@ class Platform extends JLabel {
         // Check if character is too high, then move the platform down.
         // If the platform is moving down, the charactor needs to moves down to.
         // For that reason, We need to create the method on the charactor to change it.
+        
+        if(cY < 100) {
+            character.repositionY(500);
+            curY += speed;
+        }
         
         //curY += speed;
         setLocation(curX, curY);
