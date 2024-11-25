@@ -39,7 +39,7 @@ class Menu extends JFrame {
         AddBackgroundComponents(layeredPane);
         AddTitleComponents(layeredPane);
         AddButtonComponents(layeredPane);
-        AddSoundsetting(layeredPane);
+        //AddSoundsetting(layeredPane);
 
     }
 
@@ -174,7 +174,7 @@ class Menu extends JFrame {
         return button;
     }
 
-    public void AddSoundsetting(JLayeredPane layeredPane) {
+    /*public void AddSoundsetting(JLayeredPane layeredPane) {
         JPanel soundPanel = new JPanel();
         soundPanel.setLayout(new BoxLayout(soundPanel, BoxLayout.Y_AXIS));
         soundPanel.setOpaque(false);
@@ -210,5 +210,5 @@ class Menu extends JFrame {
         soundPanel.setBounds(framewidth - 200, 10, 180, 80); // Adjust dimensions as needed
         layeredPane.add(soundPanel, JLayeredPane.PALETTE_LAYER);
 
-    }
+    }*/
 }
