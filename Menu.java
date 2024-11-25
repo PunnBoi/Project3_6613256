@@ -18,7 +18,11 @@ class Menu extends JFrame {
 
     private int btwidth = 300;
     private int btheight = 50;
+//<<<<<<< HEAD
 
+//=======
+    
+//>>>>>>> a14c56b832a80c0852cdbcc3416c934341395d84
     /*public static void main(String[] args) {
         
         Menu menu = new Menu();
@@ -44,8 +48,14 @@ class Menu extends JFrame {
         AddBackgroundComponents(layeredPane);
         AddTitleComponents(layeredPane);
         AddButtonComponents(layeredPane);
+//<<<<<<< HEAD
         AddSoundsetting(layeredPane);
 
+//=======
+        
+        
+        
+//>>>>>>> a14c56b832a80c0852cdbcc3416c934341395d84
     }
 
     public void AddBackgroundComponents(JLayeredPane layeredPane) {
@@ -118,7 +128,9 @@ class Menu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(e + " button clicked!");
-                // Write credit down here...
+                Setting setting = new Setting(game);
+                dispose();
+                setFocusable(false);
             }
         });
 

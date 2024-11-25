@@ -184,7 +184,7 @@ public class GFrame extends JFrame {
                     if (Thread.currentThread().isInterrupted()) {
                         break;
                     }
-                    //setBulletThread();
+                    setBulletThread();
                     //setPlatformThread();
                     System.out.println("This thread is currnetly running!");
                     try {
@@ -250,14 +250,30 @@ public class GFrame extends JFrame {
     */
     
     public void setPlatform() {
-        for (int i = 0; i < 20; i++) {
+        int difficulty = 15;// Prepare for the difficulty setting.
+        // Should generate the number that use for generating the platform here.
+        
+        
+        // Create the list of the Y axis platform.
+        ArrayList<Integer> result = new ArrayList<>();
+        // Calculate the list of the Y axis platform.
+        double spacing = (double) (MyConstants.GROUND_Y - 150) / (difficulty - 1); // Calculate spacing
+        for (int k = 0; k < difficulty; k++) {
+            result.add((int) Math.round(100 + k * spacing)); // Add each value
+        } 
+        
+        for (int i = 0; i < difficulty; i++) {
             // Need to create the platform in Y axis a little bit far apart.
             // Could just define the zone of the Y axis that the platform can generate.
             // No need to change the move part to behave like the generate part. 
             // Because We already initialize the space between them.
             Random rand = new Random();
+            
+            int randomIndex  = rand.nextInt(result.size()); // Radom the Y axis from the ArrayList
+            
             int xPos = rand.nextInt(0, MyConstants.FRAMEWIDTH - 100); // Random x position
-            int yPos = rand.nextInt(100, MyConstants.GROUND_Y - 50); // Random y position
+            //int yPos = rand.nextInt(100, MyConstants.GROUND_Y - 50); // Random y position
+            int yPos = result.get(randomIndex); // Random y position
             Platform newPlatform = new Platform(xPos, yPos, charLabel);
             platforms.add(newPlatform);
             drawpane.add(newPlatform);
@@ -276,7 +292,7 @@ public class GFrame extends JFrame {
                 }
                 drawpane.repaint();
                 try {
-                    Thread.sleep(50000);
+                    Thread.sleep(16); // 16 = ~60 fps
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
