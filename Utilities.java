@@ -63,7 +63,7 @@ interface MyConstants
     
     static final int GROUND_Y    = FRAMEHEIGHT-200;
     
-    static final int CHARWIDTH   = 64;
+    static final int CHARWIDTH   = 48;
     static final int CHARHEIGHT  = 64;
     
     static final int BULLWIDTH   = 40;
@@ -71,11 +71,12 @@ interface MyConstants
 }
 
 //modify this from setting menu
-interface setting
+interface gSetting
 {
     static float MasterSound = (float) 1.0;
     static float EffectSound = (float) 1.0;
     static float MusicSound = (float) 1.0;
+    static int difficulty = 4;
 }
 
 

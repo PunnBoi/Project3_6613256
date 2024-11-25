@@ -17,9 +17,11 @@ public class Game {
     
     public void openGame(){
         gWindow = new GFrame(this);
+        themeSound.stop();
     }
     public void openMenu(){
         menu = new Menu(this);
+        themeSound.playLoop();
         
     }
     
