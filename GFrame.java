@@ -67,7 +67,7 @@ public class GFrame extends JFrame {
 
         themeSound = new MySoundEffect(MyConstants.sFILE_THEME);
 //        themeSound.playLoop();
-        themeSound.setVolume(setting.MusicSound);
+        themeSound.setVolume(soundssetting.MusicSound);
         
         class MyWindowListener extends WindowAdapter {
             @Override

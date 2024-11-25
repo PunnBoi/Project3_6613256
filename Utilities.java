@@ -71,7 +71,7 @@ interface MyConstants
 }
 
 //modify this from setting menu
-interface setting
+interface soundssetting
 {
     static float MasterSound = (float) 1.0;
     static float EffectSound = (float) 1.0;

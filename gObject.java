@@ -48,7 +48,7 @@ class CharLabel extends JLabel {
         GroundCheck.setBounds(curX, curY + height - 20, width, 20);
 
         jumpS = new MySoundEffect(MyConstants.sFILE_JUMP);
-        jumpS.setVolume(setting.EffectSound);
+        jumpS.setVolume(soundssetting.EffectSound);
         
         this.parent = parent;
         this.hp = 3; 
