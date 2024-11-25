@@ -162,7 +162,7 @@ class Setting extends JFrame {
         slpanel = new JPanel();
         slpanel.setOpaque(false);
         
-        JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);  // (min, max, initial value)
+        JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);  // (min, max, initial value)
 
         // Optionally, set tick marks and labels
         slider.setPreferredSize(new Dimension(300, 100));
@@ -171,16 +171,13 @@ class Setting extends JFrame {
         slider.setPaintLabels(false);    // Show labels for major ticks
         slider.setFocusable(false);
 
-        // Create a label to show the current value of the slider
-        /*JLabel valueLabel = new JLabel("Value: " + slider.getValue());
-
-        // Add a listener to detect when the slider value changes
-        slider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                valueLabel.setText("Value: " + slider.getValue());  // Update the label with the slider value
-            }
-        });*/
+        slider.addChangeListener(e -> {
+            int volume = slider.getValue();
+            //volumeLabel.setText("Volume: " + volume + "%");
+            if (game != null && game.getThemeSound() != null) {
+            game.getThemeSound().setVolume(volume / 100.0f);  // Assuming game has a method getThemeSound()
+        }
+        });
         
         slpanel.add(slider);
         slpanel.add(Box.createRigidArea(new Dimension(10, 0)));
