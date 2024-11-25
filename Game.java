@@ -21,8 +21,8 @@ public class Game {
     }
     public void openMenu(){
         menu = new Menu(this);
+        themeSound = new MySoundEffect(MyConstants.sFILE_THEME);
         themeSound.playLoop();
-        
     }
     
     public MySoundEffect getThemeSound() {

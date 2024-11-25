@@ -61,9 +61,7 @@ public class GFrame extends JFrame {
         setFocusable(true);
         requestFocusInWindow();
 
-        themeSound = new MySoundEffect(MyConstants.sFILE_THEME);
-
-        themeSound.setVolume(gSetting.MusicSound);
+        themeSound = game.getThemeSound();
 
         
         class MyWindowListener extends WindowAdapter {
