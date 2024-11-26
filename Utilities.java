@@ -32,6 +32,9 @@ interface MyConstants
     
     static final String FILE_MAIN_BG                    = PATH + "background.gif";
     static final String FILE_MAIN_BG2                   = PATH + "background2.gif";
+    static final String FILE_MAIN_BG3                   = PATH + "background3.gif";
+    static final String FILE_MAIN_BG4                   = PATH + "background4.gif";
+    static final String FILE_MAIN_BG5                   = PATH + "background5.gif";
     static final String FILE_SETTING_BG                 = PATH + "SETTING_BG.png";
     
     static final String FILE_BUTTON1                    = PATH + "pixil-frame-0.png";
