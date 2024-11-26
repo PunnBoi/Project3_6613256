@@ -152,6 +152,23 @@ class Setting extends JFrame {
         combo.setFont(new Font("Athiti", Font.PLAIN, 20));
         combo.setFocusable(false);
         
+        combo.addActionListener(e -> {
+            String selectedOption = (String) combo.getSelectedItem();
+
+            // Change background GIF based on selection
+            switch (selectedOption) {
+                case "Background 1":
+                    break;
+                case "Background 2":
+                    break;
+                default:
+                    break;
+            }
+
+            // Refresh the panel
+            //panel.repaint();
+        });
+        
         cbpanel.add(combo);
         cbpanel.setBounds(170, frameheight/2 + 3, framewidth, frameheight);
         layeredPane.add(cbpanel, JLayeredPane.MODAL_LAYER);
@@ -252,6 +269,8 @@ class Setting extends JFrame {
         return button;
     }
     
-    
+    private void ChangeBG(int i){
+        
+    }
     
 }

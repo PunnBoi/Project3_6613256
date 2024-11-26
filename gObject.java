@@ -4,7 +4,7 @@
  */
 package Project3_6613256;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
@@ -19,22 +19,25 @@ class CharLabel extends JLabel {
             runImgL, jumpImgR, jumpImgL;
     private MySoundEffect jumpS;
 
-    final private int width = MyConstants.CHARWIDTH;
-    final private int height = MyConstants.CHARHEIGHT;
-    private int curY = MyConstants.GROUND_Y - height;
-    private int curX = 300;
-    private int speed = 10;
-    private int Jpow = 10;
-    private int dirX = 0;
-    private int dirY = 0;
-    private boolean right = true, move = false, grounded = true, gcheck = true;
-    private int hp = 3;
-    private GFrame parent;
+    final private int width = MyConstants.CHARWIDTH,
+                    height = MyConstants.CHARHEIGHT;
+    private int curY = MyConstants.GROUND_Y - height,
+                curX = MyConstants.FRAMEWIDTH/2,
+                speed = 10,
+                Jpow = 7,
+                dirX = 0,
+                dirY = 1,
+                hp = 3;
+    private boolean right = true, move = false, grounded = false, gcheck = true
+            ,callJump=false , jumped=false, falling=true;
+    
 
+    private GFrame parent;
+    private JLabel ppanel;
     private JLabel GroundCheck;
     private Object gFrame;
 
-    public CharLabel(GFrame parent) {
+    public CharLabel(GFrame p, JLabel pp) {
         idleImgR = new MyImageIcon(MyConstants.FILE_CHAR_IDLE_R).resize(width, height);
         idleImgL = new MyImageIcon(MyConstants.FILE_CHAR_IDLE_L).resize(width, height);
         runImgR = new MyImageIcon(MyConstants.FILE_CHAR_RUN_R).resize(width, height);
@@ -45,46 +48,33 @@ class CharLabel extends JLabel {
         setBounds(curX, curY, width, height);
 
         GroundCheck = new JLabel();
-        GroundCheck.setBounds(curX, curY + height - 20, width, 20);
+        GroundCheck.setBounds(curX+width/2, curY + height, width/4, 1);
 
         jumpS = new MySoundEffect(MyConstants.sFILE_JUMP);
-        jumpS.setVolume(soundssetting.EffectSound);
-        
-        this.parent = parent;
-        this.hp = 3; 
+        jumpS.setVolume(gSetting.EffectSound);
+
+        this.ppanel = pp;
+        this.parent = p;
+        hp = 3;
     }
 
-    public boolean isMove() {
-        return move;
-    }
+    public boolean isJump() {  return jumped; }
 
-    public boolean isGrounded() {
-        return grounded;
-    }
-       
-    public int getCharCurX() {
-        return curX;
-    }
+    public boolean isCheckG() { return gcheck; }
 
-    public int getCharCurY() {
-        return curY;
-    }
+    public void setGrounded(boolean t) { grounded = t; }
+
+    public int getCharCurX() { return curX; }
+
+    public int getCharCurY() { return curY; }
     
-    public void repositionY(int y) {
-        curY = y;
-    }
+    public JLabel getGCheck() { return GroundCheck; }//for when check the floor
 
-    public JLabel getGCheck() {
-        return GroundCheck;
-    }//for when check the floor
+    public void repositionY(int y) { curY = y; }
+    
+    public void setSpeed(int s) { speed = s; }
 
-    public void setSpeed(int s) {
-        speed = s;
-    }
-
-    public void setMove(boolean m) {
-        move = m;
-    }
+    public void setMove(boolean m) { move = m; }
 
     public void setSprite() {
         //make sprite turn left/right
@@ -96,7 +86,9 @@ class CharLabel extends JLabel {
                     setIcon(idleImgR);
                 }
             } else {
-                setIcon(jumpImgR);
+                if (jumped||falling) {
+                    setIcon(jumpImgR);
+                }
             }
         } else {
             if (grounded) {
@@ -106,82 +98,67 @@ class CharLabel extends JLabel {
                     setIcon(idleImgL);
                 }
             } else {
-                setIcon(jumpImgL);
+                if (jumped||falling) {
+                    setIcon(jumpImgL);
+                }
             }
         }
-        repaint();
     }
 
     public void jump() {
-        dirY = -1;
-        grounded = false;
-        gcheck = false;
-        jumpS.playOnce();
-        Thread wait = new Thread() {
-            public void run() {
-                try {
-                    this.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                dirY = 1;
-                gcheck = false;
-            } // end run
-        };
-        wait.start();
+        if(!jumped){
+            dirY = -1;
+            grounded = false;
+            gcheck = false;
+            jumpS.playOnce();
+            jumped=true;
+            falling=false;
+            Thread wait = new Thread() {
+                public void run() {
+                    try {
+                        this.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    dirY = 1;
+                    gcheck = true;
+                    falling=true;
+                } // end run
+            };
+            wait.start();
+        }
 
     }
 
     public void move() {
         // FIX GRAVITY PROBLEM(might use another method to check the gravity alone).
+        if(callJump&&grounded){
+            callJump=false;
+            jump();
+            
+        }
         curX += dirX * speed;
         if (curX < 0) {
             curX = 0;
-        } else if (curX+width > MyConstants.FRAMEWIDTH) {
+        } else if (curX + width > MyConstants.FRAMEWIDTH) {
             curX = MyConstants.FRAMEWIDTH - width;
         }
-        
+
         // Apply gravity and check for platform collisions
         if (!grounded) {
             curY += dirY * Jpow;
         }
-        
-        boolean onAnyPlatform = false;
-
-        for (Platform p : parent.getPlatforms()) {
-            // Check horizontal overlap
-            boolean horizontallyAligned = curX + width > p.getCurX() && curX < p.getCurX() + p.getWidth();
-
-            // Check vertical alignment (just above the platform)
-            boolean abovePlatform = curY + height <= p.getCurY() && curY + height + Jpow >= p.getCurY();
-
-            if (horizontallyAligned && abovePlatform) {
-                onAnyPlatform = true;
-                grounded = true;  // The character is on a platform
-                dirY = 0;         // Stop downward movement
-                break;
+        else falling=false;
+        // check whether char touching anything
+        if (!isIntersectingWithAny(this, ppanel)) {
+            if (curY + height >= MyConstants.FRAMEHEIGHT) {
+                parent.GameOver();
+            } else {
+                grounded = false;
             }
         }
-
-        // If not on any platform, character is falling
-        
-        // Need to fix the gravity problem
-        
-        if (!onAnyPlatform && grounded) {
-        //if (grounded) {
-            grounded = false;
-            dirY = 1; // Start downward movement
-        }
-        
-        // Gravity check
-        if (curY + height > MyConstants.GROUND_Y) {
-            curY = MyConstants.GROUND_Y - height;
-            grounded = true;
-        }
-
         setLocation(curX, curY);
-        GroundCheck.setLocation(curX, curY + height - 20);
-        repaint();
+        GroundCheck.setLocation(curX+width/2, curY + height);
         try {
             Thread.sleep(20);
         } catch (InterruptedException e) {
@@ -189,8 +166,20 @@ class CharLabel extends JLabel {
         }
     }
 
-    public void shoot() {
+    private static boolean isIntersectingWithAny(JLabel label, JLabel panel) {
 
+        for (Component component : panel.getComponents()) {
+            // Skip checking the label against itself
+            if (component == label) {
+                continue;
+            }
+
+            // Check intersection with other component bounds
+            if ((label.getBounds()).intersects(component.getBounds())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void keyPressed(KeyEvent e) {
@@ -206,9 +195,7 @@ class CharLabel extends JLabel {
                 move = true;
                 break;
             case KeyEvent.VK_W:
-                if (grounded) {
-                    jump();
-                }
+                if(!jumped)callJump=true;
                 break;
         }
     }
@@ -223,20 +210,23 @@ class CharLabel extends JLabel {
                 dirX = 0;
                 move = false;
                 break;
+            case KeyEvent.VK_W:
+                jumped = false;
+                break;
         }
     }
-    
-    public int gethp(){
+
+    public int gethp() {
         return hp;
     }
-    
-    public void reducehp(){
-        if(hp > 0){
-          hp --; 
-          parent.updateHeartDisplay(hp);
+
+    public void reducehp() {
+        if (hp > 0) {
+            hp--;
+            parent.updateHeartDisplay(hp);
         }
-        
-        if(hp <= 0){
+
+        if (hp <= 0) {
             hp = 0;
             parent.GameOver();
         }
@@ -244,89 +234,86 @@ class CharLabel extends JLabel {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-
 class Bullet extends JLabel {
 
-    private int curX, curY = 0, speed = 10;
+    private int curX, curY = 0, speed = 7;
     private boolean isActive;
     final private int width = MyConstants.BULLWIDTH;
     final private int height = MyConstants.BULLHEIGHT;
     final private MyImageIcon bullet;
+    private JLabel parentpane;
 
-    public Bullet() {
+    public Bullet(int pPOS,JLabel p) {
         Random rand = new Random();
-        int ranX = rand.nextInt(0, MyConstants.FRAMEWIDTH);
-        this.isActive = true;
-        this.curX = ranX;
+        int ranX = rand.nextInt(pPOS-150, pPOS+150);
+        isActive = true;
+        parentpane=p;
+        curX = ranX;
         bullet = new MyImageIcon(MyConstants.FILE_BULLET).resize(width, height);
         setIcon(bullet);
         setBounds(curX, curY, width, height);
     }
 
     public void move() {
-        if (!isActive) return;
         curY += speed;
-        
-        if (curY > MyConstants.FRAMEHEIGHT){
+
+        if (curY > MyConstants.FRAMEHEIGHT) {
             isActive = false;
+            parentpane.remove(this);
         }
         setLocation(curX, curY);
         repaint();
     }
-    
-    public boolean getIsActive(){
+
+    public boolean getIsActive() {
         return isActive;
     }
-    
-    public boolean setIsActive(boolean a){
+
+    public boolean setIsActive(boolean a) {
         return a;
     }
 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-
 class Platform extends JLabel {
+
     private int curX, curY;
     private int width = 150, height = 15;
-    private int speed = 2;
+    private int speed = 1;
+    private boolean isActive;
 
     private CharLabel character;
-    
-    public Platform(int x, int y, CharLabel charactor) {
+
+    public Platform(int x, int y, CharLabel Char) {
         this.curX = x;
         this.curY = y;
-        this.character = character;
+        this.character = Char;
 
         // Set platform image
-        setOpaque(true); 
+        setOpaque(true);
         setBackground(Color.LIGHT_GRAY);
 
         setBounds(curX, curY, width, height);
     }
-    
-    public void moveDown() {  
+
+    public void moveDown() {
+        Random rand = new Random();
+        int farLeft,farRight;
+        curY += speed;
+
         if (curY > MyConstants.FRAMEHEIGHT) {
-            Random random = new Random();
-            curY = 0; // Reset platform to the top
-            curX = random.nextInt(0, MyConstants.FRAMEWIDTH - 100);
+            farLeft = MyConstants.FRAMEWIDTH/2-300;
+            farRight = MyConstants.FRAMEWIDTH/2+300;
+            curX = rand.nextInt(farLeft, farRight);
+            curY=0;
         }
-        
-        int cX = character.getCharCurX();
-        int cY = character.getCharCurY(); 
-        
-        // Check if character is too high, then move the platform down.
-        // If the platform is moving down, the charactor needs to moves down to.
-        // For that reason, We need to create the method on the charactor to change it.
-        
-        if(cY < 100) {
-            character.repositionY(500);
-            curY += speed;
-        }
-        
-        //curY += speed;
         setLocation(curX, curY);
         repaint();
+    }
+    
+    public boolean getIsActive() {
+        return isActive;
     }
 
     public int getCurX() {

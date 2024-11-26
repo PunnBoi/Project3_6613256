@@ -20,7 +20,12 @@ interface MyConstants
     //      Don't forget to change path
     static final String PATH                            = "src/main/java/Project3_6613256/resources/";
     //static final String FILE_SAMPLE          = PATH + "Example.jpg";
-    static final String FILE_BG                         = PATH + "gBG.jpg";
+    
+    
+    static final String FILE_BG = PATH + "gBG.jpg";
+    
+    
+    
     static final String FILE_MAIN_BG                    = PATH + "background.gif";
     static final String FILE_MAIN_BG2                   = PATH + "background2.gif";
     static final String FILE_MAIN_BG3                   = PATH + "background3.gif";
@@ -66,7 +71,7 @@ interface MyConstants
     
     static final int GROUND_Y    = FRAMEHEIGHT-200;
     
-    static final int CHARWIDTH   = 64;
+    static final int CHARWIDTH   = 48;
     static final int CHARHEIGHT  = 64;
     
     static final int BULLWIDTH   = 40;
@@ -74,11 +79,13 @@ interface MyConstants
 }
 
 //modify this from setting menu
-interface soundssetting
+interface gSetting
 {
     static float MasterSound = (float) 1.0;
     static float EffectSound = (float) 1.0;
     static float MusicSound = (float) 1.0;
+    static int difficulty = 2;
+    static int bgno = 1;
 }
 
 

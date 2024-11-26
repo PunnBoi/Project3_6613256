@@ -15,7 +15,6 @@ public class GFrame extends JFrame {
     private int frameheight = MyConstants.FRAMEHEIGHT;
 
     private Game game;
-    private JPanel GPanel;
     private JPanel GUI;
     private JLabel drawpane;
     private MyImageIcon backgroundImg;
@@ -24,8 +23,6 @@ public class GFrame extends JFrame {
     private CharLabel charLabel;
 
     private boolean flag = true;
-
-    private ArrayList<Thread> allThread = new ArrayList<>();
     
     private ArrayList<Bullet> bullets = new ArrayList<>();
     
@@ -60,14 +57,12 @@ public class GFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
 
-        GPanel = new JPanel();
         setLayout(new BorderLayout());
         setFocusable(true);
         requestFocusInWindow();
 
-        themeSound = new MySoundEffect(MyConstants.sFILE_THEME);
-//        themeSound.playLoop();
-        themeSound.setVolume(soundssetting.MusicSound);
+        themeSound = game.getThemeSound();
+
         
         class MyWindowListener extends WindowAdapter {
             @Override
@@ -78,19 +73,6 @@ public class GFrame extends JFrame {
                 GameRunning = false;
                 themeSound.stop();
                 
-                for (Thread a : allThread) {
-                    a.interrupt();
-                }
-                
-                for (Thread thread : allThread) {
-                    try {
-                        thread.join(); // Wait for thread termination
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                
-                allThread.clear(); // Cleanup thread list
                 dispose(); // Close the game window
             }
         }
@@ -98,7 +80,6 @@ public class GFrame extends JFrame {
         addWindowListener(new MyWindowListener());
 
         setGPanel();
-        setBulletThread(); 
     }
 
     public void setGPanel() {
@@ -107,8 +88,13 @@ public class GFrame extends JFrame {
         GUI.setLayout(new BorderLayout());
 
         drawpane = new JLabel();
+        
+        
+        
         backgroundImg = new MyImageIcon(MyConstants.FILE_BG).
                 resize(MyConstants.FRAMEWIDTH, MyConstants.FRAMEHEIGHT);
+        
+        
         drawpane.setIcon(backgroundImg);
         drawpane.setLayout(null);
 
@@ -118,6 +104,7 @@ public class GFrame extends JFrame {
         moveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                GameRunning = false;
                 themeSound.stop();
                 dispose();
                 setFocusable(false);
@@ -135,7 +122,7 @@ public class GFrame extends JFrame {
     }
 
     public void setCharThread() {
-        charLabel = new CharLabel(this);
+        charLabel = new CharLabel(this,drawpane);
         addKeyListener(new KeyBoardControl(charLabel));
         drawpane.add(charLabel);
 
@@ -144,30 +131,25 @@ public class GFrame extends JFrame {
             public void run() {
                 //while (this.isAlive()) {
                 while (GameRunning) {
-                    if (Thread.currentThread().isInterrupted()) {
-                        break;
-                    }
-                    if (charLabel.isMove()) {
+                    if (charLabel.isJump()) {
                         flag = false;
                     }
                     requestFocusInWindow();
                     charLabel.setSprite();
                     charLabel.move();
+                    repaint();
                 }
             } // end run
         }; // end thread creation
         charThread.start();
-        allThread.add(charThread);
     }
 
     public void setPlatformRunnnerThread() {
         Thread ptrThread = new Thread() {
             public void run() {
                 System.out.println("start");
+                setPlatform();// create the platform here...
                 while (flag) {
-                    if (Thread.currentThread().isInterrupted()) {
-                        break;
-                    }
                     try {
                         Thread.sleep(20);
                     } catch (InterruptedException e) {
@@ -175,16 +157,13 @@ public class GFrame extends JFrame {
                     }
                 }
                 if (!flag) {
-                    //themeSound.playLoop();
+                    themeSound.playLoop();
                 }
+                setBulletThread();
                 
-                setPlatform();// create the platform here...
                 
                 while (GameRunning) {
-                    if (Thread.currentThread().isInterrupted()) {
-                        break;
-                    }
-                    setBulletThread();
+                    
                     //setPlatformThread();
                     System.out.println("This thread is currnetly running!");
                     try {
@@ -198,82 +177,28 @@ public class GFrame extends JFrame {
         }; // end thread creation
         ptrThread.start();
     }
- 
-    /*
-    public void setPlatformThread() {
-        Thread ptThread = new Thread() {
-            public void run() {
-                for (int i = 0; i < 20; i++) {
-                    Random rand = new Random();
-                    int xPos = rand.nextInt(0, MyConstants.FRAMEWIDTH - 100); // Random x position
-                    int yPos = rand.nextInt(100, MyConstants.GROUND_Y - 50); // Random y position
-                    Platform newPlatform = new Platform(xPos, yPos);
-                    platforms.add(newPlatform);
-                    drawpane.add(newPlatform);
-                    
-                    drawpane.repaint();
-                    
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        break;
-                    }
-                }
-            } // end run
-        }; // end thread creation
-        ptThread.start();
-        //allThread.add(ptThread);
-        
-        
-        Thread ptFallThread = new Thread() {
-            @Override
-            public void run() {
-                while(GameRunning) {
-                    for (Platform platform : platforms) {
-                        platform.moveDown();
-                        System.out.println("Platform position: " + platform.getCurY());
-                    }
-                }
-                drawpane.repaint();
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        ptFallThread.start();
-        //allThread.add(ptFallThread);
-        
-    }
-    */
     
     public void setPlatform() {
-        int difficulty = 15;// Prepare for the difficulty setting.
+        Random rand = new Random();
+        int difficulty = gSetting.difficulty;// Prepare for the difficulty setting.
         // Should generate the number that use for generating the platform here.
+        int farLeft,farRight,xPos,yPos;
+        boolean firstplatform=true;
         
-        
-        // Create the list of the Y axis platform.
-        ArrayList<Integer> result = new ArrayList<>();
-        // Calculate the list of the Y axis platform.
-        double spacing = (double) (MyConstants.GROUND_Y - 150) / (difficulty - 1); // Calculate spacing
-        for (int k = 0; k < difficulty; k++) {
-            result.add((int) Math.round(100 + k * spacing)); // Add each value
-        } 
-        
-        for (int i = 0; i < difficulty; i++) {
+        for (int i = 0; i < 15-difficulty; i++) {
             // Need to create the platform in Y axis a little bit far apart.
             // Could just define the zone of the Y axis that the platform can generate.
             // No need to change the move part to behave like the generate part. 
             // Because We already initialize the space between them.
-            Random rand = new Random();
             
-            int randomIndex  = rand.nextInt(result.size()); // Radom the Y axis from the ArrayList
-            
-            int xPos = rand.nextInt(0, MyConstants.FRAMEWIDTH - 100); // Random x position
-            //int yPos = rand.nextInt(100, MyConstants.GROUND_Y - 50); // Random y position
-            int yPos = result.get(randomIndex); // Random y position
+            farLeft = MyConstants.FRAMEWIDTH/2-300;
+            farRight = MyConstants.FRAMEWIDTH/2+300;
+            if(firstplatform){
+                xPos = charLabel.getCharCurX()+30;
+                firstplatform=false;
+            }
+            else xPos = rand.nextInt(farLeft, farRight); // Random x position
+            yPos = (charLabel.getCharCurY() + 70)-((30*difficulty)*i); // Random y position
             Platform newPlatform = new Platform(xPos, yPos, charLabel);
             platforms.add(newPlatform);
             drawpane.add(newPlatform);
@@ -286,38 +211,41 @@ public class GFrame extends JFrame {
             public void run() {
                 while (GameRunning) {
                     for (Platform platform : platforms) {
-                        platform.moveDown();
-                        System.out.println("Platform position: " + platform.getCurY());
+                        if (!flag) {
+                            platform.moveDown();
+                        }
+                        if (platform.getBounds().intersects((charLabel.getGCheck()).getBounds())) {
+                            if (charLabel.isCheckG()) {
+                                charLabel.setGrounded(true);
+                            }
+                        }
                     }
-                }
-                drawpane.repaint();
-                try {
-                    Thread.sleep(16); // 16 = ~60 fps
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    drawpane.repaint();
+
+                    
+                    try {
+                        Thread.sleep(16); // 16 = ~60 fps
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         };
         ptFallThread.start();
-        allThread.add(ptFallThread);
     }
     
     public void setBulletThread() {
+        int delay=3000/(gSetting.difficulty);
         Thread CreateBulletThread = new Thread() {
             @Override
             public void run() {
                 while (GameRunning) {
-                    if (charLabel.isMove()){
-                        Bullet bullet = new Bullet();
-                        drawpane.add(bullet);
-                        bullets.add(bullet);
-                        
-                        drawpane.repaint();
-                        System.out.println("Bullet position: " + bullet.getX() + ", " + bullet.getY()); 
-                    }
-                    
+                    Bullet bullet = new Bullet(charLabel.getCharCurX(),drawpane);
+                    drawpane.add(bullet);
+                    bullets.add(bullet);
+                    drawpane.repaint();
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(delay);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                         break;
@@ -326,7 +254,6 @@ public class GFrame extends JFrame {
             }
         };
         CreateBulletThread.start();
-        //allThread.add(CreateBulletThread);
 
         Thread BulletFallThread = new Thread() {
             @Override
@@ -341,15 +268,15 @@ public class GFrame extends JFrame {
                                 drawpane.remove(bullet);
                                 drawpane.repaint();
                                 bullets.remove(i);
-                                i++;
                                 charLabel.reducehp();
                                 System.out.println("Player's HP: " + charLabel.gethp());
                             }
                         }
+                        else bullets.remove(i);
                     }
                     drawpane.repaint();
                     try {
-                        Thread.sleep(250);
+                        Thread.sleep(20);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -357,7 +284,6 @@ public class GFrame extends JFrame {
             }
         };
         BulletFallThread.start();
-//        allThread.add(BulletFallThread);
 
     }
 
@@ -366,12 +292,6 @@ public class GFrame extends JFrame {
         
         themeSound.stop();
         setFocusable(false); 
-        for (Thread thread : allThread) {
-            if (thread.isAlive()) {
-                thread.interrupt();
-            }
-        }
-        
         GameOverDialog();
     }
     
@@ -438,8 +358,7 @@ class KeyBoardControl implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
+    public void keyTyped(KeyEvent e) {}
 
     public void keyPressed(KeyEvent e) {
         player.keyPressed(e);
