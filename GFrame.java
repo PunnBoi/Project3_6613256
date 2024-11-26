@@ -88,8 +88,13 @@ public class GFrame extends JFrame {
         GUI.setLayout(new BorderLayout());
 
         drawpane = new JLabel();
+        
+        
+        
         backgroundImg = new MyImageIcon(MyConstants.FILE_BG).
                 resize(MyConstants.FRAMEWIDTH, MyConstants.FRAMEHEIGHT);
+        
+        
         drawpane.setIcon(backgroundImg);
         drawpane.setLayout(null);
 
@@ -132,6 +137,7 @@ public class GFrame extends JFrame {
                     requestFocusInWindow();
                     charLabel.setSprite();
                     charLabel.move();
+                    repaint();
                 }
             } // end run
         }; // end thread creation
@@ -179,7 +185,7 @@ public class GFrame extends JFrame {
         int farLeft,farRight,xPos,yPos;
         boolean firstplatform=true;
         
-        for (int i = 0; i < 10-difficulty; i++) {
+        for (int i = 0; i < 15-difficulty; i++) {
             // Need to create the platform in Y axis a little bit far apart.
             // Could just define the zone of the Y axis that the platform can generate.
             // No need to change the move part to behave like the generate part. 

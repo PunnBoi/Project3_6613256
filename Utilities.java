@@ -20,7 +20,12 @@ interface MyConstants
     //      Don't forget to change path
     static final String PATH                            = "src/main/java/Project3_6613256/resources/";
     //static final String FILE_SAMPLE          = PATH + "Example.jpg";
-    static final String FILE_BG                         = PATH + "gBG.jpg";
+    
+    
+    static final String FILE_BG = PATH + "gBG.jpg";
+    
+    
+    
     static final String FILE_MAIN_BG                    = PATH + "background.gif";
     static final String FILE_MAIN_BG2                   = PATH + "background2.gif";
     static final String FILE_SETTING_BG                 = PATH + "SETTING_BG.png";
@@ -76,7 +81,8 @@ interface gSetting
     static float MasterSound = (float) 1.0;
     static float EffectSound = (float) 1.0;
     static float MusicSound = (float) 1.0;
-    static int difficulty = 4;
+    static int difficulty = 2;
+    static int bgno = 1;
 }
 
 

@@ -103,7 +103,6 @@ class CharLabel extends JLabel {
                 }
             }
         }
-        repaint();
     }
 
     public void jump() {
@@ -133,9 +132,10 @@ class CharLabel extends JLabel {
 
     public void move() {
         // FIX GRAVITY PROBLEM(might use another method to check the gravity alone).
-        if(callJump){
-            jump();
+        if(callJump&&grounded){
             callJump=false;
+            jump();
+            
         }
         curX += dirX * speed;
         if (curX < 0) {
@@ -145,7 +145,7 @@ class CharLabel extends JLabel {
         }
 
         // Apply gravity and check for platform collisions
-        if (!grounded||jumped) {
+        if (!grounded) {
             curY += dirY * Jpow;
         }
         else falling=false;
@@ -159,7 +159,6 @@ class CharLabel extends JLabel {
         }
         setLocation(curX, curY);
         GroundCheck.setLocation(curX+width/2, curY + height);
-        repaint();
         try {
             Thread.sleep(20);
         } catch (InterruptedException e) {
@@ -196,9 +195,7 @@ class CharLabel extends JLabel {
                 move = true;
                 break;
             case KeyEvent.VK_W:
-                if (grounded) {
-                    callJump=true;
-                }
+                if(!jumped)callJump=true;
                 break;
         }
     }
