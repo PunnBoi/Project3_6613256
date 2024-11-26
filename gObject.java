@@ -29,7 +29,7 @@ class CharLabel extends JLabel {
                 dirY = 1,
                 hp = 3;
     private boolean right = true, move = false, grounded = false, gcheck = true
-            , jumped=false, falling=true;
+            ,callJump=false , jumped=false, falling=true;
     
 
     private GFrame parent;
@@ -133,6 +133,10 @@ class CharLabel extends JLabel {
 
     public void move() {
         // FIX GRAVITY PROBLEM(might use another method to check the gravity alone).
+        if(callJump){
+            jump();
+            callJump=false;
+        }
         curX += dirX * speed;
         if (curX < 0) {
             curX = 0;
@@ -193,7 +197,7 @@ class CharLabel extends JLabel {
                 break;
             case KeyEvent.VK_W:
                 if (grounded) {
-                    jump();
+                    callJump=true;
                 }
                 break;
         }

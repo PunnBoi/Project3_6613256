@@ -107,7 +107,8 @@ class Menu extends JFrame {
             }
 
         });
-
+        
+        // Setting button
         creditButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
