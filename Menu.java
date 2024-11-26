@@ -9,9 +9,10 @@ class Menu extends JFrame {
     private JPanel contentpane;
     private Menu currentFrame;
     private JLabel drawpane;
-    private JButton startButton, ttrButton, creditButton, exitButton;
+    private JButton startButton, ttrButton, settingButton, exitButton;
     private MyImageIcon backgroundImg, buttonImg;
     private Game game;
+    private Setting settings = null;
 
     private int framewidth = MyConstants.FRAMEWIDTH;
     private int frameheight = MyConstants.FRAMEHEIGHT;
@@ -85,14 +86,15 @@ class Menu extends JFrame {
 
         startButton = createButton(MyConstants.FILE_BUTTON_START_NORMAL);
         ttrButton = createButton(MyConstants.FILE_BUTTON_TUTORIAL_NORMAL);
-        creditButton = createButton(MyConstants.FILE_BUTTON_CREDITS_NORMAL);
+        settingButton = createButton(MyConstants.FILE_BUTTON_CREDITS_NORMAL);
         exitButton = createButton(MyConstants.FILE_BUTTON_QUIT_NORMAL);
 
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(e + " button clicked!");
-                dispose();
+                //dispose();
+                setVisible(false);
                 setFocusable(false);
                 game.openGame(); // To start the game.
             }
@@ -102,20 +104,24 @@ class Menu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(e + " button clicked!");
-                // Write tutoreal down here...
                 
             }
 
         });
         
         // Setting button
-        creditButton.addActionListener(new ActionListener() {
+        settingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(e + " button clicked!");
-                Setting settings = new Setting(game);
-                dispose();
-                setFocusable(false);
+                if (settings == null) {
+            settings = new Setting(game, currentFrame);
+            } else {
+            settings.setVisible(true);
+            settings.requestFocus();
+        }
+
+        setVisible(false);         // ซ่อนหน้าปัจจุบัน
+        setFocusable(false);
             }
         });
 
@@ -130,7 +136,7 @@ class Menu extends JFrame {
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         buttonPanel.add(ttrButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-        buttonPanel.add(creditButton);
+        buttonPanel.add(settingButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         buttonPanel.add(exitButton);
 

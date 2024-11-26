@@ -22,15 +22,21 @@ interface MyConstants
     //static final String FILE_SAMPLE          = PATH + "Example.jpg";
     
     
-    static final String FILE_BG = PATH + "gBG.jpg";
-    
-    
+    static final String FILE_BG[] = {
+        PATH + "gBG.jpg",
+        PATH + "background2.gif",
+        PATH + "background3.gif",
+        PATH + "background4.gif",
+        PATH + "background5.gif"
+    };
     
     static final String FILE_MAIN_BG                    = PATH + "background.gif";
     static final String FILE_MAIN_BG2                   = PATH + "background2.gif";
     static final String FILE_SETTING_BG                 = PATH + "SETTING_BG.png";
     
     static final String FILE_BUTTON1                    = PATH + "pixil-frame-0.png";
+    
+    static final String FILE_TUTORIAL                   = PATH + "TUTORIAL.gif";
     
     static final String FILE_BUTTON_START_NORMAL        = PATH + "START_BUTTON.png";
     static final String FILE_BUTTON_TUTORIAL_NORMAL     = PATH + "TUTORIAL_BUTTON.png";
@@ -81,8 +87,8 @@ interface gSetting
     static float MasterSound = (float) 1.0;
     static float EffectSound = (float) 1.0;
     static float MusicSound = (float) 1.0;
-    static int difficulty = 2;
-    static int bgno = 1;
+    /*static int difficulty = 2;
+    static int bgno = 1;*/
 }
 
 
@@ -129,5 +135,37 @@ class MySoundEffect
         if (gain > 1.0f)  gain = 1.0f;
         float dB = (float)(Math.log(gain) / Math.log(10.0) * 20.0);
         gainControl.setValue(dB);
+    }
+    
+    public float getVolume() {
+    float dB = gainControl.getValue();
+    float gain = (float) Math.pow(10.0, dB / 20.0);
+    float volume = gain * 100.0f;
+    return volume;
+}
+}
+
+abstract class BGimg
+{
+    static private int picturenum = 1,difficulty = 2;
+    
+    static public void picnoset(int n)
+    {
+        picturenum = n;
+    }
+    
+    static public void diffset(int n)
+    {
+        difficulty = n;
+    }
+    
+    static public int picnoget()
+    {
+        return picturenum;
+    }
+    
+    static public int diffget()
+    {
+        return difficulty;
     }
 }

@@ -19,6 +19,7 @@ class Setting extends JFrame {
     private JComboBox           combo;
     private JToggleButton [] tb;
     private JPanel slpanel;
+    private Menu menuFrame;
     
     private int framewidth  = MyConstants.FRAMEWIDTH;
     private int frameheight = MyConstants.FRAMEHEIGHT;
@@ -26,7 +27,7 @@ class Setting extends JFrame {
     private int btwidth  = 300;
     private int btheight = 50;
     
-    public Setting(Game g)
+    public Setting(Game g,Menu menuFrame)
     {
         setTitle("Setting");
 	setSize(framewidth, frameheight); 
@@ -35,6 +36,7 @@ class Setting extends JFrame {
         setResizable(false);
 	setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
         currentFrame = this;
+        this.menuFrame = menuFrame;
         contentpane = (JPanel)getContentPane();
 	contentpane.setLayout( new BorderLayout() );    
         
@@ -102,6 +104,7 @@ class Setting extends JFrame {
         uncheckedIcon = new MyImageIcon(MyConstants.FILE_UNCHECKED_BUTTON );
         checkedIcon = new MyImageIcon(MyConstants.FILE_CHECKED_BUTTON );
         //Blank = new MyImageIcon(MyConstants.FILE_BLANK);
+        int hardnum = BGimg.diffget()-1;
         
         bgroup  = new ButtonGroup();
 	tb      = new JToggleButton[5];
@@ -116,11 +119,22 @@ class Setting extends JFrame {
             tb[i].setOpaque(false);
             tb[i].setFocusable(false);
             tb[i].setFont(new Font(" ", Font.BOLD, 20));
+            
+            final int index = i+1;
+            
+            tb[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Selected option: " + index);
+                BGimg.diffset(index);
+                }
+            });
+            
             bgroup.add( tb[i] );
-            //JLabel label = new JLabel();
-            //label.setIcon(Blank);
             bpanel.add( tb[i] );
-            //bpanel.add( label );
+            if (i == hardnum) {
+                tb[i].setSelected(true);
+            }
 	}
         
         int bpaneleWidth = bpanel.getPreferredSize().width;
@@ -141,11 +155,10 @@ class Setting extends JFrame {
         cbpanel.setOpaque(false);
         
         String [] items = new String[5];
-	items[0] = "Background 1";
-	items[1] = "Background 2";
-	items[2] = "Background 3";
-	items[3] = "Background 4";
-	items[4] = "Background 5";
+        for(int i = 0; i < 5; i++)
+        {
+            items[i] = "Background "+(i+1);
+        }
         
         
         combo = new JComboBox( items );
@@ -153,22 +166,38 @@ class Setting extends JFrame {
         combo.setFocusable(false);
         
         combo.addActionListener(e -> {
-            String selectedOption = (String) combo.getSelectedItem();
 
-            // Change background GIF based on selection
-            switch (selectedOption) {
+            String selectedImage = (String) combo.getSelectedItem();
+
+            // Change background image based on selection
+            switch (selectedImage) {
                 case "Background 1":
+                    System.out.println("Background 1");
+                    BGimg.picnoset(0);
                     break;
                 case "Background 2":
+                    System.out.println("Background 2");
+                    BGimg.picnoset(1);
+                    break;
+                case "Background 3":
+                    System.out.println("Background 3");
+                    BGimg.picnoset(2);
+                    break;
+                case "Background 4":
+                    System.out.println("Background 4");
+                    BGimg.picnoset(3);
+                    break;
+                case "Background 5":
+                    System.out.println("Background 5");
+                    BGimg.picnoset(4);
                     break;
                 default:
+                    System.out.println(e + " button clicked!");; // No background
                     break;
             }
-
-            // Refresh the panel
-            //panel.repaint();
         });
         
+        combo.setSelectedIndex(BGimg.picnoget());
         cbpanel.add(combo);
         cbpanel.setBounds(170, frameheight/2 + 3, framewidth, frameheight);
         layeredPane.add(cbpanel, JLayeredPane.MODAL_LAYER);
@@ -179,7 +208,9 @@ class Setting extends JFrame {
         slpanel = new JPanel();
         slpanel.setOpaque(false);
         
-        JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);  // (min, max, initial value)
+        int volumetemp = (int)game.getThemeSound().getVolume();
+        
+        JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 100, volumetemp);  // (min, max, initial value)
 
         // Optionally, set tick marks and labels
         slider.setPreferredSize(new Dimension(300, 100));
@@ -217,9 +248,10 @@ class Setting extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(e + " button clicked!");
-                dispose();
-                setFocusable(false);
-                game.openMenu();
+                //dispose();
+                 setVisible(false);
+                menuFrame.setVisible(true);
+            menuFrame.setFocusable(true);
             }
         });
         

@@ -4,13 +4,13 @@ package Project3_6613256;
 
 public class Game {
     private GFrame gWindow;
-    private Menu menu;
+    private Menu menu = null;
     
     private static int mSound;
-    private MySoundEffect themeSound;
+    private MySoundEffect themeSound = new MySoundEffect(MyConstants.sFILE_THEME);;
     
     public Game(){
-        themeSound = new MySoundEffect(MyConstants.sFILE_THEME);
+        //themeSound = new MySoundEffect(MyConstants.sFILE_THEME);
         themeSound.playLoop();
         menu = new Menu(this);
     }
@@ -20,9 +20,18 @@ public class Game {
         themeSound.stop();
     }
     public void openMenu(){
-        menu = new Menu(this);
-        themeSound = new MySoundEffect(MyConstants.sFILE_THEME);
+        
+        //themeSound = new MySoundEffect(MyConstants.sFILE_THEME);
         themeSound.playLoop();
+        if(menu == null)
+        {
+            menu = new Menu(this);
+        }
+        else {
+            
+            menu.setVisible(true);
+            menu.requestFocus();
+        }
     }
     
     public MySoundEffect getThemeSound() {

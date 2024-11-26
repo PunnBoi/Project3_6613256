@@ -89,11 +89,12 @@ public class GFrame extends JFrame {
 
         drawpane = new JLabel();
         
+        int bgn = BGimg.picnoget();
         
-        
-        backgroundImg = new MyImageIcon(MyConstants.FILE_BG).
+        backgroundImg = new MyImageIcon(MyConstants.FILE_BG[bgn]).
                 resize(MyConstants.FRAMEWIDTH, MyConstants.FRAMEHEIGHT);
         
+        repaint();
         
         drawpane.setIcon(backgroundImg);
         drawpane.setLayout(null);
@@ -120,6 +121,11 @@ public class GFrame extends JFrame {
         add(drawpane, BorderLayout.CENTER);
         validate();
     }
+    
+     public void setBackgroundImage(MyImageIcon image) {
+                this.backgroundImg = image;
+                repaint();
+            }
 
     public void setCharThread() {
         charLabel = new CharLabel(this,drawpane);
@@ -180,7 +186,7 @@ public class GFrame extends JFrame {
     
     public void setPlatform() {
         Random rand = new Random();
-        int difficulty = gSetting.difficulty;// Prepare for the difficulty setting.
+        int difficulty = BGimg.diffget();// Prepare for the difficulty setting.
         // Should generate the number that use for generating the platform here.
         int farLeft,farRight,xPos,yPos;
         boolean firstplatform=true;
@@ -235,7 +241,7 @@ public class GFrame extends JFrame {
     }
     
     public void setBulletThread() {
-        int delay=3000/(gSetting.difficulty);
+        int delay=3000/(BGimg.diffget());
         Thread CreateBulletThread = new Thread() {
             @Override
             public void run() {
