@@ -57,12 +57,12 @@ class Menu extends JFrame {
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
         titlePanel.setOpaque(false);
 
-        JLabel title = new JLabel("PROJECT 3");
+        JLabel title = new JLabel("Touch the sky");
         title.setFont(new Font("Algerian", Font.PLAIN, 128));
-        title.setForeground(new Color(116, 9, 56));
+        title.setForeground(new Color(140, 9, 156));
         //titlePanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
-        JLabel title2 = new JLabel("PROJECT 3");
+        JLabel title2 = new JLabel("JAVA PROJECT 3");
         title2.setFont(new Font("Algerian", Font.PLAIN, 64));
         title2.setForeground(new Color(116, 9, 56));
 
