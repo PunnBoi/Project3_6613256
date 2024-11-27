@@ -13,6 +13,8 @@ public class GFrame extends JFrame {
 
     private int framewidth = MyConstants.FRAMEWIDTH;
     private int frameheight = MyConstants.FRAMEHEIGHT;
+    private int CountScore;
+    private int Count = 0;
 
     private Game game;
     private JPanel GUI;
@@ -22,30 +24,31 @@ public class GFrame extends JFrame {
 
     private CharLabel charLabel;
 
+    private JTextField score;
+
     private boolean flag = true;
-    
+
     private ArrayList<Bullet> bullets = new ArrayList<>();
-    
-    private ArrayList<Platform> platforms = new ArrayList<>(); 
-    
+
+    private ArrayList<Platform> platforms = new ArrayList<>();
+
     // This is for platform ground check
     public ArrayList<Platform> getPlatforms() {
         return platforms;
     }
-    
+
     private boolean GameRunning = true;
-    
+
     private final int MAX_HP = 3;
     private JLabel heartLabels;
     private int width = 100;
     private int height = 50;
     private final String[] heartImages = {
-    MyConstants.FILE_HEART_0,  // Empty heart image
-    MyConstants.FILE_HEART_1,  // 1 heart image
-    MyConstants.FILE_HEART_2,  // 2 hearts image
-    MyConstants.FILE_HEART_3 
-};
-    
+        MyConstants.FILE_HEART_0, // Empty heart image
+        MyConstants.FILE_HEART_1, // 1 heart image
+        MyConstants.FILE_HEART_2, // 2 hearts image
+        MyConstants.FILE_HEART_3
+    };
 
     public GFrame(Game g) {
         requestFocusInWindow();
@@ -62,16 +65,16 @@ public class GFrame extends JFrame {
 
         themeSound = game.getThemeSound();
 
-        
         class MyWindowListener extends WindowAdapter {
+
             @Override
             public void windowClosing(WindowEvent e) {
                 // This windowClosing is when playing game, user close the windows.
                 // When this trigger, the game close and the program is finished.
-                
+
                 GameRunning = false;
                 themeSound.stop();
-                
+
                 dispose(); // Close the game window
             }
         }
@@ -87,28 +90,28 @@ public class GFrame extends JFrame {
         GUI.setLayout(new BorderLayout());
 
         drawpane = new JLabel();
-        
+
         int bgn = BGimg.picnoget();
-        
+
         backgroundImg = new MyImageIcon(MyConstants.FILE_BG[bgn]).
                 resize(MyConstants.FRAMEWIDTH, MyConstants.FRAMEHEIGHT);
-        
+
         repaint();
-        
+
         drawpane.setIcon(backgroundImg);
         drawpane.setLayout(null);
 
         setHeartPanel();
-        
+
         // ADD timer start countdown
         JLabel timerLabel = new JLabel("00:00");
         timerLabel.setFont(new Font("Arial", Font.PLAIN, 24));
         timerLabel.setForeground(Color.BLACK);
-        timerLabel.setHorizontalAlignment(SwingConstants.CENTER); 
-        
+        timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
         int countdownTime = 60;// For coundown timer
         int difficulty = BGimg.diffget();
-        
+
         javax.swing.Timer countdownTimer = new javax.swing.Timer(1000, new ActionListener() {
             int timeLeft = countdownTime;
 
@@ -133,9 +136,8 @@ public class GFrame extends JFrame {
             }
         });
         countdownTimer.start(); // Start the countdown timer
-        
-        
-        JButton moveButton = new JButton("Menu");
+
+        JButton moveButton = new JButton("Back To Menu");
         moveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -147,23 +149,30 @@ public class GFrame extends JFrame {
             }
         });
 
+        score = new JTextField("0", 5);
+        score.setEditable(false);
+        JPanel ScorePanel = new JPanel();
+        ScorePanel.add(new JLabel("Score: "));
+        ScorePanel.add(score);
+
         setCharThread();
         setPlatformRunnnerThread();
 
         GUI.add(moveButton, BorderLayout.WEST);
-        GUI.add(timerLabel, BorderLayout.NORTH);
+        GUI.add(timerLabel, BorderLayout.CENTER);
+        GUI.add(ScorePanel, BorderLayout.EAST);
         add(GUI, BorderLayout.NORTH);
         add(drawpane, BorderLayout.CENTER);
         validate();
     }
-    
+
     public void setBackgroundImage(MyImageIcon image) {
         this.backgroundImg = image;
         repaint();
     }
-    
+
     public void setCharThread() {
-        charLabel = new CharLabel(this,drawpane);
+        charLabel = new CharLabel(this, drawpane);
         addKeyListener(new KeyBoardControl(charLabel));
         drawpane.add(charLabel);
 
@@ -201,10 +210,9 @@ public class GFrame extends JFrame {
                     themeSound.playLoop();
                 }
                 setBulletThread();
-                
-                
+
                 while (GameRunning) {
-                    
+
                     //setPlatformThread();
                     System.out.println("This thread is currnetly running!");
                     try {
@@ -218,35 +226,36 @@ public class GFrame extends JFrame {
         }; // end thread creation
         ptrThread.start();
     }
-    
+
     public void setPlatform() {
         Random rand = new Random();
         int difficulty = BGimg.diffget();// Prepare for the difficulty setting.
         // Should generate the number that use for generating the platform here.
-        int farLeft,farRight,xPos,yPos;
-        boolean firstplatform=true;
-        
-        for (int i = 0; i < 15-difficulty; i++) {
+        int farLeft, farRight, xPos, yPos;
+        boolean firstplatform = true;
+
+        for (int i = 0; i < 15 - difficulty; i++) {
             // Need to create the platform in Y axis a little bit far apart.
             // Could just define the zone of the Y axis that the platform can generate.
             // No need to change the move part to behave like the generate part. 
             // Because We already initialize the space between them.
-            
-            farLeft = MyConstants.FRAMEWIDTH/2-300;
-            farRight = MyConstants.FRAMEWIDTH/2+300;
-            if(firstplatform){
-                xPos = charLabel.getCharCurX()+30;
-                firstplatform=false;
+
+            farLeft = MyConstants.FRAMEWIDTH / 2 - 300;
+            farRight = MyConstants.FRAMEWIDTH / 2 + 300;
+            if (firstplatform) {
+                xPos = charLabel.getCharCurX() + 30;
+                firstplatform = false;
+            } else {
+                xPos = rand.nextInt(farLeft, farRight); // Random x position
             }
-            else xPos = rand.nextInt(farLeft, farRight); // Random x position
-            yPos = (charLabel.getCharCurY() + 70)-((30*difficulty)*i); // Random y position
+            yPos = (charLabel.getCharCurY() + 70) - ((30 * difficulty) * i); // Random y position
             Platform newPlatform = new Platform(xPos, yPos, charLabel);
             platforms.add(newPlatform);
             drawpane.add(newPlatform);
 
             drawpane.repaint();
-        } 
-        
+        }
+
         Thread ptFallThread = new Thread() {
             @Override
             public void run() {
@@ -256,14 +265,28 @@ public class GFrame extends JFrame {
                             platform.moveDown();
                         }
                         if (platform.getBounds().intersects((charLabel.getGCheck()).getBounds())) {
-                            if (charLabel.isCheckG()) {
-                                charLabel.setGrounded(true);
+                            if (!platform.getisVisit()) {
+                                // First time landing on the platform
+                                if (charLabel.isCheckG()) {
+                                    charLabel.setGrounded(true);
+                                    platform.setisVisit(true);
+                                    UpdateScore(10);
+                                }
+                            } 
+                            else {
+                                if (charLabel.isCheckG()) {
+                                    charLabel.setGrounded(true);
+
+                                }
                             }
+                        } 
+                        else {
+                            platform.setisVisit(false);
                         }
+
                     }
                     drawpane.repaint();
 
-                    
                     try {
                         Thread.sleep(16); // 16 = ~60 fps
                     } catch (InterruptedException e) {
@@ -274,14 +297,14 @@ public class GFrame extends JFrame {
         };
         ptFallThread.start();
     }
-    
+
     public void setBulletThread() {
-        int delay=3000/(BGimg.diffget());
+        int delay = 3000 / (BGimg.diffget());
         Thread CreateBulletThread = new Thread() {
             @Override
             public void run() {
                 while (GameRunning) {
-                    Bullet bullet = new Bullet(charLabel.getCharCurX(),drawpane);
+                    Bullet bullet = new Bullet(charLabel.getCharCurX(), drawpane);
                     drawpane.add(bullet);
                     bullets.add(bullet);
                     drawpane.repaint();
@@ -305,6 +328,7 @@ public class GFrame extends JFrame {
                         if (bullet.getIsActive()) {
                             bullet.move();
                             if (bullet.getBounds().intersects(charLabel.getBounds())) {
+                                UpdateScore(-100);
                                 bullet.setIsActive(false);
                                 drawpane.remove(bullet);
                                 drawpane.repaint();
@@ -312,8 +336,9 @@ public class GFrame extends JFrame {
                                 charLabel.reducehp();
                                 System.out.println("Player's HP: " + charLabel.gethp());
                             }
+                        } else {
+                            bullets.remove(i);
                         }
-                        else bullets.remove(i);
                     }
                     drawpane.repaint();
                     try {
@@ -328,27 +353,32 @@ public class GFrame extends JFrame {
 
     }
 
+    public synchronized void UpdateScore(int count) {
+        CountScore += count;
+        score.setText(String.valueOf(CountScore));
+    }
+
     public void GameOver() {
         GameRunning = false;
-        
+
         themeSound.stop();
-        setFocusable(false); 
+        setFocusable(false);
         GameOverDialog();
     }
-    
+
     public void GameOverDialog() {
         // Create a modal JDialog
         JDialog gameOverDialog = new JDialog(this, "Game Over", true);
         gameOverDialog.setLayout(new BorderLayout());
         gameOverDialog.setSize(300, 150);
         gameOverDialog.setLocationRelativeTo(this); // Center on the parent frame
-        
+
         JLabel message = new JLabel("Game Over. Click OK to return to the menu.", JLabel.CENTER);
         JButton okButton = new JButton("OK");
-        
+
         setFocusable(true);
         requestFocusInWindow();
-        
+
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -361,7 +391,7 @@ public class GFrame extends JFrame {
                 game.openMenu(); // Open the menu
             }
         });
-        
+
         // Layout components
         gameOverDialog.add(message, BorderLayout.CENTER);
         JPanel buttonPanel = new JPanel();
@@ -370,9 +400,9 @@ public class GFrame extends JFrame {
 
         // Show the dialog
         gameOverDialog.setVisible(true);
-        
+
     }
-    
+
     public void setHeartPanel() {
         heartLabels = new JLabel();
         heartLabels.setIcon(new MyImageIcon(heartImages[3]).resize(200, 64));
@@ -380,14 +410,14 @@ public class GFrame extends JFrame {
         drawpane.add(heartLabels);
         drawpane.repaint();
     }
-    
+
     public void updateHeartDisplay(int hp) {
-    if (hp >= 0 && hp < heartImages.length) {
-        heartLabels.setIcon(new MyImageIcon(heartImages[hp]).resize(200,64)); // Update image
-        drawpane.repaint();
-        System.out.println("Updated heart display to HP: " + hp);
+        if (hp >= 0 && hp < heartImages.length) {
+            heartLabels.setIcon(new MyImageIcon(heartImages[hp]).resize(200, 64)); // Update image
+            drawpane.repaint();
+            System.out.println("Updated heart display to HP: " + hp);
+        }
     }
-}
 }
 
 class KeyBoardControl implements KeyListener {
@@ -399,7 +429,8 @@ class KeyBoardControl implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {
+    }
 
     public void keyPressed(KeyEvent e) {
         player.keyPressed(e);

@@ -284,7 +284,7 @@ class Platform extends JLabel {
     private int width = 150, height = 15;
     private int speed = 1;
     private boolean isActive;
-
+    private boolean isVisit= false;
     private CharLabel character;
 
     public Platform(int x, int y, CharLabel Char) {
@@ -316,6 +316,14 @@ class Platform extends JLabel {
     
     public boolean getIsActive() {
         return isActive;
+    }
+    
+    public boolean getisVisit() {
+        return isVisit;
+    }
+    
+     public void setisVisit(boolean visited) {
+        this.isVisit = visited;
     }
 
     public int getCurX() {
