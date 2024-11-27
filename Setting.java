@@ -11,7 +11,7 @@ class Setting extends JFrame {
     
     private JPanel              contentpane;
     private Setting             currentFrame;
-    private JLabel              drawpane;
+    private JLabel              drawpane,stpane;
     private MyImageIcon         backgroundImg,uncheckedIcon,checkedIcon,buttonImg,settingIn;
     private JButton             backButton;
     private ButtonGroup         bgroup;
@@ -27,18 +27,24 @@ class Setting extends JFrame {
     private int btwidth  = 300;
     private int btheight = 50;
     
+    private int bgn;
+    
     public Setting(Game g,Menu menuFrame)
     {
         setTitle("Setting");
 	setSize(framewidth, frameheight); 
         setLocationRelativeTo(null);
 	setVisible(true);
-        setResizable(false);
 	setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
         currentFrame = this;
         this.menuFrame = menuFrame;
         contentpane = (JPanel)getContentPane();
-	contentpane.setLayout( new BorderLayout() );    
+	contentpane.setLayout( new BorderLayout() );  
+        
+        bgn = BGimg.picnoget();
+        
+        backgroundImg = new MyImageIcon(MyConstants.FILE_BG[bgn]).
+                resize(MyConstants.FRAMEWIDTH, MyConstants.FRAMEHEIGHT);
         
         game = g;
         
@@ -67,23 +73,24 @@ class Setting extends JFrame {
     public void AddSettingInterface(JLayeredPane layeredPane)
     {
         settingIn  = new MyImageIcon(MyConstants.FILE_SETTING_BG);
-	drawpane = new JLabel();
-	drawpane.setIcon(settingIn);
+	stpane = new JLabel();
+	stpane.setIcon(settingIn);
         
-        int drawpaneWidth = drawpane.getPreferredSize().width;  // Replace with actual size if fixed
-        int drawpaneHeight = drawpane.getPreferredSize().height;
+        int drawpaneWidth = stpane.getPreferredSize().width;  // Replace with actual size if fixed
+        int drawpaneHeight = stpane.getPreferredSize().height;
         
         int x = (framewidth - drawpaneWidth) / 2;
         int y = (frameheight - drawpaneHeight) / 2;
 
-        drawpane.setBounds(x, y, drawpaneWidth, drawpaneHeight);
-        layeredPane.add(drawpane, JLayeredPane.PALETTE_LAYER);
+        stpane.setBounds(x, y, drawpaneWidth, drawpaneHeight);
+        layeredPane.add(stpane, JLayeredPane.PALETTE_LAYER);
         
     }
     
     public void AddBackgroundComponents(JLayeredPane layeredPane)
     {
-        backgroundImg  = new MyImageIcon(MyConstants.FILE_MAIN_BG).resize(framewidth, frameheight);
+        
+        
 	drawpane = new JLabel();
 	drawpane.setIcon(backgroundImg);
         
@@ -173,23 +180,23 @@ class Setting extends JFrame {
             switch (selectedImage) {
                 case "Background 1":
                     System.out.println("Background 1");
-                    BGimg.picnoset(0);
+                    ChangeBG(0);
                     break;
                 case "Background 2":
                     System.out.println("Background 2");
-                    BGimg.picnoset(1);
+                    ChangeBG(1);
                     break;
                 case "Background 3":
                     System.out.println("Background 3");
-                    BGimg.picnoset(2);
+                    ChangeBG(2);
                     break;
                 case "Background 4":
                     System.out.println("Background 4");
-                    BGimg.picnoset(3);
+                    ChangeBG(3);
                     break;
                 case "Background 5":
                     System.out.println("Background 5");
-                    BGimg.picnoset(4);
+                    ChangeBG(4);
                     break;
                 default:
                     System.out.println(e + " button clicked!");; // No background
@@ -302,7 +309,12 @@ class Setting extends JFrame {
     }
     
     private void ChangeBG(int i){
-        
+        BGimg.picnoset(i);
+        bgn = BGimg.picnoget();
+        backgroundImg = new MyImageIcon(MyConstants.FILE_BG[bgn]).
+                resize(MyConstants.FRAMEWIDTH, MyConstants.FRAMEHEIGHT);
+        drawpane.setIcon(backgroundImg);
+        drawpane.repaint();
     }
     
 }

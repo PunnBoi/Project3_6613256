@@ -71,6 +71,7 @@ interface MyConstants
     //static final String FILE_SOUND       = PATH + "sound.wav";
     static final String sFILE_THEME                     = PATH + "theme.wav";
     static final String sFILE_JUMP                      = PATH + "jumpsound.wav";
+    static final String sFILE_HIT                       = PATH + "hitsound.wav";
     //sizes
     static final int FRAMEWIDTH  = 1366;
     static final int FRAMEHEIGHT = 768;
@@ -88,8 +89,6 @@ interface MyConstants
 interface gSetting
 {
     static float MasterSound = (float) 1.0;
-    static float EffectSound = (float) 1.0;
-    static float MusicSound = (float) 1.0;
     /*static int difficulty = 2;
     static int bgno = 1;*/
 }
@@ -150,7 +149,7 @@ class MySoundEffect
 
 abstract class BGimg
 {
-    static private int picturenum = 1,difficulty = 2;
+    static private int picturenum = 0,difficulty = 2;
     
     static public void picnoset(int n)
     {

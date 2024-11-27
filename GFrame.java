@@ -52,7 +52,6 @@ public class GFrame extends JFrame {
         game = g;
         setTitle("Test Game");// Change this title when hava a game name
         setSize(framewidth, frameheight);
-        setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);

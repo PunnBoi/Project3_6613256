@@ -25,7 +25,6 @@ class Menu extends JFrame {
         setSize(framewidth, frameheight);
         setLocationRelativeTo(null);
         setVisible(true);
-        setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         currentFrame = this;
         contentpane = (JPanel) getContentPane();

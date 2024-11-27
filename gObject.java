@@ -17,7 +17,7 @@ class CharLabel extends JLabel {
 
     final private MyImageIcon idleImgR, idleImgL, runImgR,
             runImgL, jumpImgR, jumpImgL;
-    private MySoundEffect jumpS;
+    private MySoundEffect jumpS,hitS;
 
     final private int width = MyConstants.CHARWIDTH,
                     height = MyConstants.CHARHEIGHT;
@@ -51,7 +51,8 @@ class CharLabel extends JLabel {
         GroundCheck.setBounds(curX+width/2, curY + height, width/4, 1);
 
         jumpS = new MySoundEffect(MyConstants.sFILE_JUMP);
-        jumpS.setVolume(gSetting.EffectSound);
+        
+        hitS = new MySoundEffect(MyConstants.sFILE_HIT);
 
         this.ppanel = pp;
         this.parent = p;
@@ -221,6 +222,7 @@ class CharLabel extends JLabel {
     }
 
     public void reducehp() {
+        hitS.playOnce();
         if (hp > 0) {
             hp--;
             parent.updateHeartDisplay(hp);
