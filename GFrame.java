@@ -25,6 +25,8 @@ public class GFrame extends JFrame {
     private CharLabel charLabel;
 
     private JTextField score;
+    
+    private javax.swing.Timer countdownTimer;
 
     private boolean flag = true;
 
@@ -109,28 +111,39 @@ public class GFrame extends JFrame {
         timerLabel.setForeground(Color.BLACK);
         timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        int countdownTime = 60;// For coundown timer
+
+        int chooseTime; 
         int difficulty = BGimg.diffget();
+        System.out.printf("difficulty = %d\n", difficulty);
+        if (difficulty == 5) {
+            chooseTime = 0; // For Endless mode(time start at 0)
+        } else {
+            chooseTime = 60; // For other mode(time start at 60)
+        }
 
-        javax.swing.Timer countdownTimer = new javax.swing.Timer(1000, new ActionListener() {
-            int timeLeft = countdownTime;
-
+        countdownTimer = new javax.swing.Timer(1000, new ActionListener() {
+            int timeLeft = chooseTime;
             @Override
             public void actionPerformed(ActionEvent e) {
                 int minutes = timeLeft / 60;
                 int seconds = timeLeft % 60;
-                // Update the timer label with the remaining time
-                if (!flag) {  // Check if the character has jumped (flag == false)
+                
+                if (!flag && GameRunning) {  
                     // Update the timer label with the remaining time
                     timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
 
                     // Decrement the countdown
-                    if (timeLeft > 0) {
+                    if (difficulty == 5) { // Endless mode
+                        timeLeft++;
+                    }
+                    
+                    else if (timeLeft > 0) {
                         timeLeft--;
                     } else {
                         // Timer runs out, stop the countdown and perform an action
                         ((javax.swing.Timer) e.getSource()).stop();
                         System.out.println("Time's up!");
+                        GameOver(); 
                     }
                 }
             }
@@ -360,6 +373,10 @@ public class GFrame extends JFrame {
 
     public void GameOver() {
         GameRunning = false;
+        
+        if (countdownTimer != null) {
+            countdownTimer.stop(); // Stop the countdown timer
+        }
 
         themeSound.stop();
         setFocusable(false);
