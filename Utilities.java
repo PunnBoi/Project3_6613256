@@ -9,7 +9,7 @@ package Project3_6613256;
  * @author User
  */
 import java.awt.Image;
-import javax.swing.ImageIcon;
+import javax.swing.*;
 import javax.sound.sampled.*;     // for sounds
 
 
@@ -30,28 +30,46 @@ interface MyConstants
         PATH + "background5.gif"
     };
     
+    static final String FILE_TTRCOMPO[] = {
+        PATH + "A.gif",
+        PATH + "D.gif",
+        PATH + "W.gif",
+        PATH + "RUNLEFT.gif",
+        PATH + "RUNRIGHT.gif",
+        PATH + "JUMP.gif",
+    };
+    
+    
     static final String FILE_MAIN_BG                    = PATH + "background.gif";
     static final String FILE_MAIN_BG2                   = PATH + "background2.gif";
     static final String FILE_MAIN_BG3                   = PATH + "background3.gif";
     static final String FILE_MAIN_BG4                   = PATH + "background4.gif";
     static final String FILE_MAIN_BG5                   = PATH + "background5.gif";
     static final String FILE_SETTING_BG                 = PATH + "SETTING_BG.png";
+    static final String FILE_TUTORIAL_BG                 = PATH + "TUTORIAL_BG.png";
+    static final String FILE_TUTORIAL_BG1                 = PATH + "TTR.png";
     
     static final String FILE_BUTTON1                    = PATH + "pixil-frame-0.png";
+    
+    static final String FILE_TITLE                    = PATH + "TITLE.png";
     
     static final String FILE_TUTORIAL                   = PATH + "TUTORIAL.gif";
     
     static final String FILE_BUTTON_START_NORMAL        = PATH + "START_BUTTON.png";
     static final String FILE_BUTTON_TUTORIAL_NORMAL     = PATH + "TUTORIAL_BUTTON.png";
+    static final String FILE_BUTTON_SETTING_NORMAL      = PATH + "SETTING_BUTTON.png";
     static final String FILE_BUTTON_CREDITS_NORMAL      = PATH + "CREDIT_BUTTON.png";
     static final String FILE_BUTTON_QUIT_NORMAL         = PATH + "QUIT_BUTTON.png";
     static final String FILE_BUTTON_BACK_NORMAL         = PATH + "BACK_BUTTON.png";
+    static final String FILE_BUTTON_HOME_NORMAL         = PATH + "HOME.png";
     
     static final String FILE_BUTTON_START_PRESSED       = PATH + "START_BUTTON_PRESSED.png";
     static final String FILE_BUTTON_TUTORIAL_PRESSED    = PATH + "TUTORIAL_BUTTON_PRESSED.png";
-    static final String FILE_BUTTON_CREDITS_PRESSED     = PATH + "CREDIT_BUTTON_PRESSED.png";
+    static final String FILE_BUTTON_SETTING_PRESSED     = PATH + "SETTING_BUTTON_PRESSED.png";
+    static final String FILE_BUTTON_CREDITS_PRESSED      = PATH + "CREDIT_BUTTON_PRESSED.png";
     static final String FILE_BUTTON_QUIT_PRESSED        = PATH + "QUIT_BUTTON_PRESSED.png";
     static final String FILE_BUTTON_BACK_PRESSED        = PATH + "BACK_BUTTON_PRESSED.png";
+    static final String FILE_BUTTON_HOME_PRESSED        = PATH + "HOME_PRESSED.png";
     
     static final String FILE_UNCHECKED_BUTTON           = PATH + "UNCHECKED_BUTTON.png";
     static final String FILE_CHECKED_BUTTON             = PATH + "CHECKED_BUTTON.png";
@@ -69,10 +87,14 @@ interface MyConstants
     static final String FILE_HEART_3                    = PATH + "heart_3.png";
     
     //static final String FILE_SOUND       = PATH + "sound.wav";
-    static final String sFILE_THEME                     = PATH + "theme.wav";
+    static final String sFILE_THEME[]                   =
+    {
+        PATH + "theme.wav",
+        PATH + "CHIPI.wav"
+    };
     static final String sFILE_JUMP                      = PATH + "jumpsound.wav";
     static final String sFILE_HIT                       = PATH + "hitsound.wav";
-    //sizes
+
     static final int FRAMEWIDTH  = 1366;
     static final int FRAMEHEIGHT = 768;
     
@@ -170,4 +192,6 @@ abstract class BGimg
     {
         return difficulty;
     }
+    
+    
 }

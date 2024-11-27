@@ -6,68 +6,70 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-class Setting extends JFrame {
+class Setting {
 
     
     private JPanel              contentpane;
     private Setting             currentFrame;
     private JLabel              drawpane,stpane;
-    private MyImageIcon         backgroundImg,uncheckedIcon,checkedIcon,buttonImg,settingIn;
+    private MyImageIcon         backgroundImg,uncheckedIcon,checkedIcon,buttonImg,settingIn,pressedIcon,releasedIcon;
     private JButton             backButton;
     private ButtonGroup         bgroup;
     private Game                game;
     private JComboBox           combo;
     private JToggleButton [] tb;
     private JPanel slpanel;
-    private Menu menuFrame;
+    private CardLayout cardLayout;
     
     private int framewidth  = MyConstants.FRAMEWIDTH;
     private int frameheight = MyConstants.FRAMEHEIGHT;
     
     private int btwidth  = 300;
     private int btheight = 50;
+    private int smallbtwidth  = 50;
     
     private int bgn;
-    
-    public Setting(Game g,Menu menuFrame)
-    {
-        setTitle("Setting");
-	setSize(framewidth, frameheight); 
-        setLocationRelativeTo(null);
-	setVisible(true);
-	setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
-        currentFrame = this;
-        this.menuFrame = menuFrame;
-        contentpane = (JPanel)getContentPane();
-	contentpane.setLayout( new BorderLayout() );  
+        
+    public Setting(Game g, CardLayout cardlayout, JPanel contentPane)
+    {   
+        this.cardLayout = cardlayout;
+        this.contentpane = contentPane;
+        this.game = g;
         
         bgn = BGimg.picnoget();
         
         backgroundImg = new MyImageIcon(MyConstants.FILE_BG[bgn]).
                 resize(MyConstants.FRAMEWIDTH, MyConstants.FRAMEHEIGHT);
-        
-        game = g;
-        
-        try
-	{
+    }
+    
+    public Setting(){}
+    
+    public JPanel createSetting()
+    {
+        JPanel settingPanel = new JPanel(new BorderLayout()); // Main panel with BorderLayout
+        JLayeredPane layeredPane = new JLayeredPane();        // Layered pane for components
+        layeredPane.setLayout(null);                         // Set null layout for manual positioning
+        settingPanel.add(layeredPane, BorderLayout.CENTER);
+
+        // Apply Look and Feel
+        try {
             String look4 = "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel";
             UIManager.setLookAndFeel(look4);
-	}
-	catch (Exception e) { System.out.println(e); }
-        
-        
-        JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setLayout(null);  // Set null layout to manually position components
-        contentpane.add(layeredPane, BorderLayout.CENTER);
-        
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        // Add components to the layeredPane
         AddBackgroundComponents(layeredPane);
         AddSettingInterface(layeredPane);
         AddCheckboxComponents(layeredPane);
         AddComboComponents(layeredPane);
         AddSliderComponents(layeredPane);
         AddButtonComponents(layeredPane);
-        validate();
-        
+
+        // Validate the panel
+        settingPanel.validate();
+        return settingPanel;
     }
     
     public void AddSettingInterface(JLayeredPane layeredPane)
@@ -110,7 +112,7 @@ class Setting extends JFrame {
          
         uncheckedIcon = new MyImageIcon(MyConstants.FILE_UNCHECKED_BUTTON );
         checkedIcon = new MyImageIcon(MyConstants.FILE_CHECKED_BUTTON );
-        //Blank = new MyImageIcon(MyConstants.FILE_BLANK);
+        
         int hardnum = BGimg.diffget()-1;
         
         bgroup  = new ButtonGroup();
@@ -249,16 +251,12 @@ class Setting extends JFrame {
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         buttonPanel.setOpaque(false);
         
-        backButton     = createButton(MyConstants.FILE_BUTTON_BACK_NORMAL);
+        backButton     = createButton(MyConstants.FILE_BUTTON_BACK_NORMAL,"large");
         
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(e + " button clicked!");
-                //dispose();
-                 setVisible(false);
-                menuFrame.setVisible(true);
-            menuFrame.setFocusable(true);
+        cardLayout.show(contentpane, "MenuPanel");
             }
         });
         
@@ -266,22 +264,26 @@ class Setting extends JFrame {
         buttonPanel.setBounds(0, frameheight-200, framewidth, 350);  // Position buttons
         layeredPane.add(buttonPanel, JLayeredPane.MODAL_LAYER);
         
-        validate();
         
     }
     
-    private JButton createButton(String text) {
+    public JButton createButton(String text, String size) {
         
-       
-        
-        buttonImg = new MyImageIcon(text).resize(btwidth, btheight);
+        if(size=="large"){
+            buttonImg = new MyImageIcon(text).resize(btwidth, btheight);
+        } else {
+            buttonImg = new MyImageIcon(text).resize(smallbtwidth, btheight);
+        }
         JButton button = new JButton(buttonImg);
         
-        
-        
         button.setFocusPainted(false);
+        if(size=="large"){
         button.setMaximumSize(new Dimension(300,50));
         button.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+        } else {
+            button.setMaximumSize(new Dimension(50,50));
+            button.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+        }
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         button.setContentAreaFilled(false);
@@ -293,14 +295,18 @@ class Setting extends JFrame {
         @Override
         public void mousePressed(MouseEvent e) {
             // Change the button's image when pressed
-            ImageIcon pressedIcon = new MyImageIcon(text.replace(".png", "_PRESSED.png")).resize(btwidth, btheight);
+            if(size=="large")
+            pressedIcon = new MyImageIcon(text.replace(".png", "_PRESSED.png")).resize(btwidth, btheight);
+            else pressedIcon = new MyImageIcon(text.replace(".png", "_PRESSED.png")).resize(smallbtwidth, btheight);
             button.setIcon(pressedIcon);  // Set the new image when button is pressed
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
             // Restore the original image when released
-            ImageIcon releasedIcon = new MyImageIcon(text).resize(btwidth, btheight);
+            if(size=="large")
+            releasedIcon = new MyImageIcon(text).resize(btwidth, btheight);
+            else releasedIcon = new MyImageIcon(text).resize(smallbtwidth, btheight);
             button.setIcon(releasedIcon);  // Restore the original image
         }
     });

@@ -10,37 +10,62 @@ class Menu extends JFrame {
     private Menu currentFrame;
     private JLabel drawpane;
     private JButton startButton, ttrButton, settingButton, exitButton;
-    private MyImageIcon backgroundImg, buttonImg;
+    private MyImageIcon backgroundImg, buttonImg, Timg;
     private Game game;
-    private Setting settings = null;
+    private CardLayout cardLayout;
 
     private int framewidth = MyConstants.FRAMEWIDTH;
     private int frameheight = MyConstants.FRAMEHEIGHT;
 
-    private int btwidth = 300;
-    private int btheight = 50;
+    private Setting set;
+    private Tutorial ttr;
     
     public Menu(Game g) {
+        
         setTitle("Project3");
         setSize(framewidth, frameheight);
         setLocationRelativeTo(null);
-        setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        currentFrame = this;
-        contentpane = (JPanel) getContentPane();
-        contentpane.setLayout(new BorderLayout());
+        
+        game =g;
+        
+        cardLayout = new CardLayout();
+        contentpane = new JPanel(cardLayout);
+        setContentPane(contentpane);
 
-        game = g;
+        JPanel menuPanel = createMenuPanel();
+        contentpane.add(menuPanel, "MenuPanel");
+        
+        set = new Setting(g, cardLayout, contentpane);
+        JPanel settingPanel = set.createSetting();
+        contentpane.add(settingPanel, "SettingPanel");
+        
+        ttr = new Tutorial(cardLayout, contentpane);
+        JPanel ttrPanel = ttr.createTutorial();
+        contentpane.add(ttrPanel, "ttrPanel");
+        
+        cardLayout.show(contentpane, "MenuPanel");
 
+        setVisible(true);
+
+    }
+    
+    public JPanel createMenuPanel()
+    {
+        JPanel menuPanel = new JPanel(new BorderLayout());
+
+        // Create the layered pane for the menu panel
         JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setLayout(null);  // Set null layout to manually position components
-        contentpane.add(layeredPane, BorderLayout.CENTER);
+        layeredPane.setLayout(null); // Allows manual positioning of components
+        menuPanel.add(layeredPane, BorderLayout.CENTER);
 
+        // Add components to the layered pane
         AddBackgroundComponents(layeredPane);
         AddTitleComponents(layeredPane);
         AddButtonComponents(layeredPane);
-        //AddSoundsetting(layeredPane);
+        AddJTextComponents(layeredPane);
 
+        return menuPanel;
     }
 
     public void AddBackgroundComponents(JLayeredPane layeredPane) {
@@ -53,11 +78,22 @@ class Menu extends JFrame {
     }
 
     public void AddTitleComponents(JLayeredPane layeredPane) {
+        
         JPanel titlePanel = new JPanel();
-        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+        titlePanel.setLayout(null);
         titlePanel.setOpaque(false);
+        Timg = new MyImageIcon(MyConstants.FILE_TITLE).resize(720, 320);;
+        JLabel Title = new JLabel();
+        Title.setIcon(Timg);
+        
+        int x = (framewidth - 720) / 2;
+        
+        
+        Title.setBounds(x, 50, 720, 320);
+        layeredPane.setLayout(null);
+        layeredPane.add(Title, JLayeredPane.PALETTE_LAYER);
 
-        JLabel title = new JLabel("Touch the sky");
+        /*JLabel title = new JLabel("Touch the sky");
         title.setFont(new Font("Algerian", Font.PLAIN, 128));
         title.setForeground(new Color(140, 9, 156));
         //titlePanel.add(Box.createRigidArea(new Dimension(0, 5)));
@@ -70,23 +106,24 @@ class Menu extends JFrame {
         title2.setAlignmentX(Component.CENTER_ALIGNMENT);
         titlePanel.add(title);
         titlePanel.add(Box.createRigidArea(new Dimension(0, -25)));
-        titlePanel.add(title2);
-
-        titlePanel.setBounds(0, 150, framewidth, 400);
-        layeredPane.add(titlePanel, JLayeredPane.PALETTE_LAYER);
+        titlePanel.add(title2);*/
+//        titlePanel.setBounds(0, 150, framewidth, 400);
+//        layeredPane.add(titlePanel, JLayeredPane.PALETTE_LAYER);
 
     }
 
     public void AddButtonComponents(JLayeredPane layeredPane) {
 
+        set = new Setting(game, cardLayout, contentpane);
+        
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         buttonPanel.setOpaque(false);
 
-        startButton = createButton(MyConstants.FILE_BUTTON_START_NORMAL);
-        ttrButton = createButton(MyConstants.FILE_BUTTON_TUTORIAL_NORMAL);
-        settingButton = createButton(MyConstants.FILE_BUTTON_CREDITS_NORMAL);
-        exitButton = createButton(MyConstants.FILE_BUTTON_QUIT_NORMAL);
+        startButton = set.createButton(MyConstants.FILE_BUTTON_START_NORMAL,"large");
+        ttrButton = set.createButton(MyConstants.FILE_BUTTON_TUTORIAL_NORMAL,"large");
+        settingButton = set.createButton(MyConstants.FILE_BUTTON_SETTING_NORMAL,"large");
+        exitButton = set.createButton(MyConstants.FILE_BUTTON_QUIT_NORMAL,"large");
 
         startButton.addActionListener(new ActionListener() {
             @Override
@@ -103,7 +140,7 @@ class Menu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(e + " button clicked!");
-                
+                cardLayout.show(contentpane, "ttrPanel");
             }
 
         });
@@ -112,15 +149,8 @@ class Menu extends JFrame {
         settingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (settings == null) {
-            settings = new Setting(game, currentFrame);
-            } else {
-            settings.setVisible(true);
-            settings.requestFocus();
-        }
-
-        setVisible(false);         // ซ่อนหน้าปัจจุบัน
-        setFocusable(false);
+                
+                cardLayout.show(contentpane, "SettingPanel");
             }
         });
 
@@ -146,75 +176,88 @@ class Menu extends JFrame {
         validate();
 
     }
+    
+    public void AddJTextComponents(JLayeredPane layeredPane){
+        
+        JPanel panel = new JPanel();
+        panel.setOpaque(false);
+        JTextField textField = new JTextField(20); 
+        textField.setBorder(null);
+        String placeholder = "Code here";
 
-    private JButton createButton(String text) {
+        textField.setText(placeholder);
+        textField.setFont(new Font("Arial", Font.PLAIN, 20));
+        textField.setBackground(Color.LIGHT_GRAY);
+        textField.setForeground(Color.BLACK);
+        textField.setHorizontalAlignment(JTextField.CENTER);
 
-        buttonImg = new MyImageIcon(text).resize(btwidth, btheight);
-        JButton button = new JButton(buttonImg);
-
-        button.setFocusPainted(false);
-        button.setMaximumSize(new Dimension(300, 50));
-        button.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        button.setContentAreaFilled(false);
-        button.setOpaque(false);
-        button.setBorderPainted(false);
-
-        button.addMouseListener(new MouseAdapter() {
+        textField.addFocusListener(new FocusListener() {
             @Override
-            public void mousePressed(MouseEvent e) {
-                // Change the button's image when pressed
-                ImageIcon pressedIcon = new MyImageIcon(text.replace(".png", "_PRESSED.png")).resize(btwidth, btheight);
-                button.setIcon(pressedIcon);  // Set the new image when button is pressed
+            public void focusGained(FocusEvent e) {
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                }
             }
 
             @Override
-            public void mouseReleased(MouseEvent e) {
-                // Restore the original image when released
-                ImageIcon releasedIcon = new MyImageIcon(text).resize(btwidth, btheight);
-                button.setIcon(releasedIcon);  // Restore the original image
+            public void focusLost(FocusEvent e) {
+                if (textField.getText().isEmpty()) {
+                    textField.setText(placeholder);
+                }
             }
         });
+        
+        textField.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String input = textField.getText();
 
-        return button;
+            // Validate input
+            if (input.isEmpty() || input.equals(placeholder)) {
+                // Show dialog for invalid input
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Please Enter Correct Input",
+                    "Wrong Input",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+                textField.setForeground(Color.GRAY);
+                textField.setText(placeholder); // Reset to placeholder
+            } else {
+                // Handle specific inputs
+                switch (input.toLowerCase()) {
+                    case "credit":
+                        JOptionPane.showMessageDialog(null,
+                        "6613113 Kavee Tangmanpakdeepong\n"
+                        + "6613256 Punnapat Panat\n"
+                        + "6613263 Passakorn Aiamwasu\n"
+                        + "6613274 Sujira Duangkaewnapalai", "Credits", JOptionPane.INFORMATION_MESSAGE);
+                        break;
+
+                    case "car":
+                        System.out.println("car");
+                        game.changeThemeSound();
+                        break;
+
+                    default:
+                        // Handle other inputs
+                        System.out.println("Unrecognized command: " + input);
+                        JOptionPane.showMessageDialog(
+                            null,
+                            "Unrecognized input: " + input,
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                        );
+                        break;
+                }
+            }
+        }
+    });
+
+        panel.add(textField);
+        panel.setBounds(20, frameheight-150, 200, 50); 
+        layeredPane.add(panel, JLayeredPane.MODAL_LAYER);
+
     }
 
-    /*public void AddSoundsetting(JLayeredPane layeredPane) {
-        JPanel soundPanel = new JPanel();
-        soundPanel.setLayout(new BoxLayout(soundPanel, BoxLayout.Y_AXIS));
-        soundPanel.setOpaque(false);
-
-        JLabel volumeLabel = new JLabel("Volume: 100%");
-        volumeLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        volumeLabel.setForeground(Color.WHITE);
-        volumeLabel.setAlignmentX(Component.CENTER_ALIGNMENT); 
-
-        JSlider volumeSlider = new JSlider(0, 100, 100); // Min: 0, Max: 100, Default: 50
-        volumeSlider.setMajorTickSpacing(25);
-        volumeSlider.setMinorTickSpacing(5);
-        volumeSlider.setPaintTicks(true);
-        volumeSlider.setPaintLabels(true);
-        volumeSlider.setPaintTicks(true);
-        volumeSlider.setOpaque(false);
-        volumeSlider.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-
-        volumeSlider.addChangeListener(e -> {
-            int volume = volumeSlider.getValue();
-            volumeLabel.setText("Volume: " + volume + "%");
-            if (game != null && game.getThemeSound() != null) {
-            game.getThemeSound().setVolume(volume / 100.0f);  // Assuming game has a method getThemeSound()
-        }
-        });
-        // Add components to the panel
-        soundPanel.add(volumeLabel);
-        soundPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        soundPanel.add(volumeSlider);
-
-        // Set the bounds for the panel to position it at the top-right corner
-        soundPanel.setBounds(framewidth - 200, 10, 180, 80); // Adjust dimensions as needed
-        layeredPane.add(soundPanel, JLayeredPane.PALETTE_LAYER);
-
-    }*/
 }

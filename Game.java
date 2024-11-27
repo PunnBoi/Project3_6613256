@@ -7,7 +7,7 @@ public class Game {
     private Menu menu = null;
     
     private static int mSound;
-    private MySoundEffect themeSound = new MySoundEffect(MyConstants.sFILE_THEME);;
+    private MySoundEffect themeSound = new MySoundEffect(MyConstants.sFILE_THEME[0]);
     
     public Game(){
         //themeSound = new MySoundEffect(MyConstants.sFILE_THEME);
@@ -36,5 +36,13 @@ public class Game {
     
     public MySoundEffect getThemeSound() {
         return themeSound;
+    }
+    
+    public void changeThemeSound() {
+        if (themeSound != null) {
+            themeSound.stop();
+        }
+        themeSound = new MySoundEffect(MyConstants.sFILE_THEME[1]);
+        themeSound.playLoop();
     }
 }
