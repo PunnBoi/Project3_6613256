@@ -100,6 +100,41 @@ public class GFrame extends JFrame {
 
         setHeartPanel();
         
+        // ADD timer start countdown
+        JLabel timerLabel = new JLabel("00:00");
+        timerLabel.setFont(new Font("Arial", Font.PLAIN, 24));
+        timerLabel.setForeground(Color.BLACK);
+        timerLabel.setHorizontalAlignment(SwingConstants.CENTER); 
+        
+        int countdownTime = 60;// For coundown timer
+        int difficulty = BGimg.diffget();
+        
+        javax.swing.Timer countdownTimer = new javax.swing.Timer(1000, new ActionListener() {
+            int timeLeft = countdownTime;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int minutes = timeLeft / 60;
+                int seconds = timeLeft % 60;
+                // Update the timer label with the remaining time
+                if (!flag) {  // Check if the character has jumped (flag == false)
+                    // Update the timer label with the remaining time
+                    timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
+
+                    // Decrement the countdown
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                    } else {
+                        // Timer runs out, stop the countdown and perform an action
+                        ((javax.swing.Timer) e.getSource()).stop();
+                        System.out.println("Time's up!");
+                    }
+                }
+            }
+        });
+        countdownTimer.start(); // Start the countdown timer
+        
+        
         JButton moveButton = new JButton("Menu");
         moveButton.addActionListener(new ActionListener() {
             @Override
@@ -116,16 +151,17 @@ public class GFrame extends JFrame {
         setPlatformRunnnerThread();
 
         GUI.add(moveButton, BorderLayout.WEST);
+        GUI.add(timerLabel, BorderLayout.NORTH);
         add(GUI, BorderLayout.NORTH);
         add(drawpane, BorderLayout.CENTER);
         validate();
     }
     
-     public void setBackgroundImage(MyImageIcon image) {
-                this.backgroundImg = image;
-                repaint();
-            }
-
+    public void setBackgroundImage(MyImageIcon image) {
+        this.backgroundImg = image;
+        repaint();
+    }
+    
     public void setCharThread() {
         charLabel = new CharLabel(this,drawpane);
         addKeyListener(new KeyBoardControl(charLabel));
