@@ -127,7 +127,7 @@ class Setting extends JFrame {
             tb[i].setFocusable(false);
             tb[i].setFont(new Font(" ", Font.BOLD, 20));
             
-            final int index = i+1;
+            final int index = i+2;
             
             tb[i].addActionListener(new ActionListener() {
                 @Override

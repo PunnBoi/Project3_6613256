@@ -248,7 +248,7 @@ public class GFrame extends JFrame {
             } else {
                 xPos = rand.nextInt(farLeft, farRight); // Random x position
             }
-            yPos = (charLabel.getCharCurY() + 70) - ((30 * difficulty) * i); // Random y position
+            yPos = (charLabel.getCharCurY() + 70) - ((30 * difficulty) *i); // Random y position
             Platform newPlatform = new Platform(xPos, yPos, charLabel);
             platforms.add(newPlatform);
             drawpane.add(newPlatform);
@@ -372,9 +372,8 @@ public class GFrame extends JFrame {
         gameOverDialog.setLayout(new BorderLayout());
         gameOverDialog.setSize(300, 150);
         gameOverDialog.setLocationRelativeTo(this); // Center on the parent frame
-
-        JLabel message = new JLabel("Game Over. Click OK to return to the menu.", JLabel.CENTER);
-        JButton okButton = new JButton("OK");
+        JLabel message = new JLabel("Game Over!, Score = "+CountScore, JLabel.CENTER);
+        JButton okButton = new JButton("Back To Menu");
 
         setFocusable(true);
         requestFocusInWindow();
