@@ -153,7 +153,7 @@ class CharLabel extends JLabel {
         // check whether char touching anything
         if (!isIntersectingWithAny(this, ppanel)) {
             if (curY + height >= MyConstants.FRAMEHEIGHT) {
-                parent.GameOver();
+                parent.GameOver(-1);
             } else {
                 grounded = false;
             }
@@ -230,7 +230,7 @@ class CharLabel extends JLabel {
 
         if (hp <= 0) {
             hp = 0;
-            parent.GameOver();
+            parent.GameOver(-1);
         }
     }
 }

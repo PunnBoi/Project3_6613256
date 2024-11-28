@@ -107,14 +107,6 @@ interface MyConstants
     static final int BULLHEIGHT  = 40;
 }
 
-//modify this from setting menu
-interface gSetting
-{
-    static float MasterSound = (float) 1.0;
-    /*static int difficulty = 2;
-    static int bgno = 1;*/
-}
-
 
 // Auxiliary class to resize image
 class MyImageIcon extends ImageIcon
@@ -169,9 +161,10 @@ class MySoundEffect
 }
 }
 
-abstract class BGimg
+abstract class sSetting
 {
     static private int picturenum = 0,difficulty = 2;
+    static private float MasterSound = (float) 1.0;
     
     static public void picnoset(int n)
     {
@@ -193,5 +186,12 @@ abstract class BGimg
         return difficulty;
     }
     
+    static public void setSound(float a){
+        MasterSound=a;
+    }
+    
+    static public float getSound(){
+        return MasterSound;
+    }
     
 }

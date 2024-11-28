@@ -93,7 +93,7 @@ public class GFrame extends JFrame {
 
         drawpane = new JLabel();
 
-        int bgn = BGimg.picnoget();
+        int bgn = sSetting.picnoget();
 
         backgroundImg = new MyImageIcon(MyConstants.FILE_BG[bgn]).
                 resize(MyConstants.FRAMEWIDTH, MyConstants.FRAMEHEIGHT);
@@ -113,7 +113,7 @@ public class GFrame extends JFrame {
 
 
         int chooseTime; 
-        int difficulty = BGimg.diffget();
+        int difficulty = sSetting.diffget();
         System.out.printf("difficulty = %d\n", difficulty);
         if (difficulty == 5) {
             chooseTime = 0; // For Endless mode(time start at 0)
@@ -143,7 +143,7 @@ public class GFrame extends JFrame {
                         // Timer runs out, stop the countdown and perform an action
                         ((javax.swing.Timer) e.getSource()).stop();
                         System.out.println("Time's up!");
-                        GameOver(); 
+                        GameOver(sSetting.diffget()); 
                     }
                 }
             }
@@ -242,12 +242,12 @@ public class GFrame extends JFrame {
 
     public void setPlatform() {
         Random rand = new Random();
-        int difficulty = BGimg.diffget();// Prepare for the difficulty setting.
+        int difficulty = sSetting.diffget();// Prepare for the difficulty setting.
         // Should generate the number that use for generating the platform here.
         int farLeft, farRight, xPos, yPos;
         boolean firstplatform = true;
 
-        for (int i = 0; i < 15 - difficulty; i++) {
+        for (int i = 0; i < 12 - difficulty; i++) {
             // Need to create the platform in Y axis a little bit far apart.
             // Could just define the zone of the Y axis that the platform can generate.
             // No need to change the move part to behave like the generate part. 
@@ -261,7 +261,7 @@ public class GFrame extends JFrame {
             } else {
                 xPos = rand.nextInt(farLeft, farRight); // Random x position
             }
-            yPos = (charLabel.getCharCurY() + 70) - ((30 * difficulty) *i); // Random y position
+            yPos = (charLabel.getCharCurY() + 70) - ((35 * difficulty) *i); // Random y position
             Platform newPlatform = new Platform(xPos, yPos, charLabel);
             platforms.add(newPlatform);
             drawpane.add(newPlatform);
@@ -312,7 +312,7 @@ public class GFrame extends JFrame {
     }
 
     public void setBulletThread() {
-        int delay = 3000 / (BGimg.diffget());
+        int delay = 3000 / (sSetting.diffget());
         Thread CreateBulletThread = new Thread() {
             @Override
             public void run() {
@@ -371,7 +371,7 @@ public class GFrame extends JFrame {
         score.setText(String.valueOf(CountScore));
     }
 
-    public void GameOver() {
+    public void GameOver(int i) {
         GameRunning = false;
         
         if (countdownTimer != null) {
@@ -380,16 +380,28 @@ public class GFrame extends JFrame {
 
         themeSound.stop();
         setFocusable(false);
-        GameOverDialog();
+        GameOverDialog(i);
     }
 
-    public void GameOverDialog() {
+    public void GameOverDialog(int i) {
         // Create a modal JDialog
+        String Text="You win!, Score = "+CountScore,
+                EXtext="Code: ";
         JDialog gameOverDialog = new JDialog(this, "Game Over", true);
         gameOverDialog.setLayout(new BorderLayout());
         gameOverDialog.setSize(300, 150);
         gameOverDialog.setLocationRelativeTo(this); // Center on the parent frame
-        JLabel message = new JLabel("Game Over!, Score = "+CountScore, JLabel.CENTER);
+        switch(i){
+            case 2:
+                EXtext=EXtext+"credit";
+                break;
+            default:
+                Text="Game Over!, Score = "+CountScore;
+                break;
+        }
+        JPanel mGroup = new JPanel(new GridLayout(0, 1));
+        JLabel message = new JLabel(Text, JLabel.CENTER),
+                EXmessage = new JLabel(EXtext, JLabel.CENTER);
         JButton okButton = new JButton("Back To Menu");
 
         setFocusable(true);
@@ -409,7 +421,9 @@ public class GFrame extends JFrame {
         });
 
         // Layout components
-        gameOverDialog.add(message, BorderLayout.CENTER);
+        mGroup.add(message);
+        if(i>0)mGroup.add(EXmessage);
+        gameOverDialog.add(mGroup, BorderLayout.CENTER);
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(okButton);
         gameOverDialog.add(buttonPanel, BorderLayout.SOUTH);

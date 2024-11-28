@@ -36,7 +36,7 @@ class Setting {
         this.contentpane = contentPane;
         this.game = g;
         
-        bgn = BGimg.picnoget();
+        bgn = sSetting.picnoget();
         
         backgroundImg = new MyImageIcon(MyConstants.FILE_BG[bgn]).
                 resize(MyConstants.FRAMEWIDTH, MyConstants.FRAMEHEIGHT);
@@ -113,7 +113,7 @@ class Setting {
         uncheckedIcon = new MyImageIcon(MyConstants.FILE_UNCHECKED_BUTTON );
         checkedIcon = new MyImageIcon(MyConstants.FILE_CHECKED_BUTTON );
         
-        int hardnum = BGimg.diffget()-1;
+        int hardnum = sSetting.diffget()-1;
         
         bgroup  = new ButtonGroup();
 	tb      = new JToggleButton[5];
@@ -129,13 +129,13 @@ class Setting {
             tb[i].setFocusable(false);
             tb[i].setFont(new Font(" ", Font.BOLD, 20));
             
-            final int index = i+2;
+            final int index = i+1;
             
             tb[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("Selected option: " + index);
-                BGimg.diffset(index);
+                sSetting.diffset(index);
                 }
             });
             
@@ -206,7 +206,7 @@ class Setting {
             }
         });
         
-        combo.setSelectedIndex(BGimg.picnoget());
+        combo.setSelectedIndex(sSetting.picnoget());
         cbpanel.add(combo);
         cbpanel.setBounds(170, frameheight/2 + 3, framewidth, frameheight);
         layeredPane.add(cbpanel, JLayeredPane.MODAL_LAYER);
@@ -230,9 +230,9 @@ class Setting {
 
         slider.addChangeListener(e -> {
             int volume = slider.getValue();
-            //volumeLabel.setText("Volume: " + volume + "%");
+            sSetting.setSound(volume);
             if (game != null && game.getThemeSound() != null) {
-            game.getThemeSound().setVolume(volume / 100.0f);  // Assuming game has a method getThemeSound()
+            game.getThemeSound().setVolume(sSetting.getSound()/100f);  // Assuming game has a method getThemeSound()
         }
         });
         
@@ -315,8 +315,8 @@ class Setting {
     }
     
     private void ChangeBG(int i){
-        BGimg.picnoset(i);
-        bgn = BGimg.picnoget();
+        sSetting.picnoset(i);
+        bgn = sSetting.picnoget();
         backgroundImg = new MyImageIcon(MyConstants.FILE_BG[bgn]).
                 resize(MyConstants.FRAMEWIDTH, MyConstants.FRAMEHEIGHT);
         drawpane.setIcon(backgroundImg);
