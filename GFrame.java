@@ -190,7 +190,7 @@ public class GFrame extends JFrame {
         int farLeft, farRight, xPos, yPos;
         boolean firstplatform = true;
 
-        for (int i = 0; i < 12 - difficulty; i++) {
+        for (int i = 0; i < 12 - difficulty-2; i++) {
             
             farLeft = MyConstants.FRAMEWIDTH / 2 - 300;
             farRight = MyConstants.FRAMEWIDTH / 2 + 300;
@@ -251,7 +251,7 @@ public class GFrame extends JFrame {
     }
 
     public void setBulletThread() {
-        int delay = 3000 / (sSetting.diffget());
+        int delay = 3000 / (sSetting.diffget()+1);
         Thread CreateBulletThread = new Thread() {
             @Override
             public void run() {
