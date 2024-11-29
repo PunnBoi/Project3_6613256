@@ -28,6 +28,7 @@ class CharLabel extends JLabel {
                 dirX = 0,
                 dirY = 1,
                 hp = 3;
+    private float u=0;
     private boolean right = true, move = false, grounded = false, gcheck = true
             ,callJump=false , jumped=false, falling=true;
     
@@ -147,9 +148,14 @@ class CharLabel extends JLabel {
 
         // Apply gravity and check for platform collisions
         if (!grounded) {
-            curY += dirY * Jpow;
+            if(u>Jpow)u=Jpow;
+            curY += dirY * u;
+            u+=0.7;
         }
-        else falling=false;
+        else {
+            falling=false;
+            u=0;
+        }
         // check whether char touching anything
         if (!isIntersectingWithAny(this, ppanel)) {
             if (curY + height >= MyConstants.FRAMEHEIGHT) {
@@ -161,7 +167,7 @@ class CharLabel extends JLabel {
         setLocation(curX, curY);
         GroundCheck.setLocation(curX+width/2, curY + height);
         try {
-            Thread.sleep(20);
+            Thread.sleep(16);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

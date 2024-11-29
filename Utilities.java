@@ -27,7 +27,8 @@ interface MyConstants
         PATH + "background2.gif",
         PATH + "background3.gif",
         PATH + "background4.gif",
-        PATH + "background5.gif"
+        PATH + "background5.gif",
+        PATH + "backgroundC.jpg"
     };
     
     static final String FILE_TTRCOMPO[] = {
@@ -45,6 +46,7 @@ interface MyConstants
     static final String FILE_MAIN_BG3                   = PATH + "background3.gif";
     static final String FILE_MAIN_BG4                   = PATH + "background4.gif";
     static final String FILE_MAIN_BG5                   = PATH + "background5.gif";
+    static final String FILE_MAIN_BGC                   = PATH + "backgroundC.jpg";
     static final String FILE_SETTING_BG                 = PATH + "SETTING_BG.png";
     static final String FILE_TUTORIAL_BG                 = PATH + "TUTORIAL_BG.png";
     static final String FILE_TUTORIAL_BG1                 = PATH + "TTR.png";
@@ -164,7 +166,7 @@ class MySoundEffect
 abstract class sSetting
 {
     static private int picturenum = 0,difficulty = 2;
-    static private float MasterSound = (float) 1.0;
+    static private float MasterSound = (float) 100.0;
     
     static public void picnoset(int n)
     {

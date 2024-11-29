@@ -111,8 +111,6 @@ class MainApplication extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(e + " button clicked!");
-                //dispose();
                 setVisible(false);
                 setFocusable(false);
                 game.openGame(); // To start the game.
@@ -122,7 +120,6 @@ class MainApplication extends JFrame {
         ttrButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(e + " button clicked!");
                 cardLayout.show(contentpane, "ttrPanel");
             }
 
@@ -132,7 +129,6 @@ class MainApplication extends JFrame {
         settingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
                 cardLayout.show(contentpane, "SettingPanel");
             }
         });
@@ -219,6 +215,7 @@ class MainApplication extends JFrame {
 
                     case "car":
                         System.out.println("car");
+                        sSetting.picnoset(5);
                         game.changeThemeSound();
                         break;
 

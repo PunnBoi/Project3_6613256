@@ -14,7 +14,6 @@ public class GFrame extends JFrame {
     private int framewidth = MyConstants.FRAMEWIDTH;
     private int frameheight = MyConstants.FRAMEHEIGHT;
     private int CountScore;
-    private int Count = 0;
 
     private Game game;
     private JPanel GUI;
@@ -301,7 +300,7 @@ public class GFrame extends JFrame {
                     drawpane.repaint();
 
                     try {
-                        Thread.sleep(16); // 16 = ~60 fps
+                        Thread.sleep(20); 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -393,7 +392,10 @@ public class GFrame extends JFrame {
         gameOverDialog.setLocationRelativeTo(this); // Center on the parent frame
         switch(i){
             case 2:
-                EXtext=EXtext+"credit";
+                EXtext = EXtext + "credit";
+                break;
+            case 4:
+                EXtext = EXtext + "car";
                 break;
             default:
                 Text="Game Over!, Score = "+CountScore;
