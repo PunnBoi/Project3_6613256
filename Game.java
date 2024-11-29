@@ -31,7 +31,6 @@ public class Game {
     
     public void openMenu(){
         
-        //themeSound = new MySoundEffect(MyConstants.sFILE_THEME);
         themeSound.playLoop();
         if(menu == null)
         {

@@ -177,7 +177,7 @@ public class GFrame extends JFrame {
                 if (!flag) {
                     themeSound.playLoop();
                 }
-                //setBulletThread();
+                setBulletThread();
 
                 while (GameRunning) {
 
@@ -216,7 +216,7 @@ public class GFrame extends JFrame {
             } else {
                 xPos = rand.nextInt(farLeft, farRight); // Random x position
             }
-            yPos = (charLabel.getCharCurY() + 70) - ((34 * difficulty) *i); // Random y position
+            yPos = (charLabel.getCharCurY() + 70) - ((34 * (difficulty+2)) *i); // Random y position
             Platform newPlatform = new Platform(xPos, yPos, charLabel);
             platforms.add(newPlatform);
             drawpane.add(newPlatform);
@@ -332,7 +332,7 @@ public class GFrame extends JFrame {
         int chooseTime; 
         int difficulty = sSetting.diffget();
         System.out.printf("difficulty = %d\n", difficulty);
-        if (difficulty == 5) {
+        if (difficulty == 4) {
             chooseTime = 0; // For Endless mode(time start at 0)
         } else {
             chooseTime = 60; // For other mode(time start at 60)
@@ -350,7 +350,7 @@ public class GFrame extends JFrame {
                     timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
 
                     // Decrement the countdown
-                    if (difficulty == 5) { // Endless mode
+                    if (difficulty == 4) { // Endless mode
                         timeLeft++;
                     }
                     
@@ -395,14 +395,14 @@ public class GFrame extends JFrame {
         gameOverDialog.setSize(300, 150);
         gameOverDialog.setLocationRelativeTo(this); // Center on the parent frame
         switch(i){
-            case 2:
-                EXtext = EXtext + "credit";
+            case -1:
+                Text="Game Over!, Score = "+CountScore;
                 break;
-            case 4:
+            case 0:
                 EXtext = EXtext + "car";
                 break;
             default:
-                Text="Game Over!, Score = "+CountScore;
+                EXtext = EXtext + "credit";
                 break;
         }
         JPanel mGroup = new JPanel(new GridLayout(0, 1));
@@ -428,7 +428,7 @@ public class GFrame extends JFrame {
 
         // Layout components
         mGroup.add(message);
-        if(i>0)mGroup.add(EXmessage);
+        if(i>=0)mGroup.add(EXmessage);
         gameOverDialog.add(mGroup, BorderLayout.CENTER);
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(okButton);

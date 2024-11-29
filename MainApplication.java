@@ -88,7 +88,6 @@ class MainApplication extends JFrame {
         
         int x = (framewidth - 720) / 2;
         
-        
         Title.setBounds(x, 50, 720, 320);
         layeredPane.setLayout(null);
         layeredPane.add(Title, JLayeredPane.PALETTE_LAYER);
@@ -148,7 +147,6 @@ class MainApplication extends JFrame {
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         buttonPanel.add(exitButton);
 
-        //contentpane.add(buttonPanel, BorderLayout.CENTER);
         buttonPanel.setBounds(0, frameheight / 2 + 30, framewidth, 350);  // Position buttons
         layeredPane.add(buttonPanel, JLayeredPane.MODAL_LAYER);
 

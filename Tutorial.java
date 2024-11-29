@@ -103,10 +103,7 @@ public class Tutorial {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null,
-                        "6613113 Kavee Tangmanpakdeepong\n"
-                        + "6613256 Punnapat Panat\n"
-                        + "6613263 Passakorn Aiamwasu\n"
-                        + "6613274 Sujira Duangkaewnapalai", "Credits", JOptionPane.INFORMATION_MESSAGE);
+                        "Beat Normal Mode or Harder!\n", "Credits", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 

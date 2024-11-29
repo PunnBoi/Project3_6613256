@@ -91,14 +91,11 @@ class Setting {
     
     public void AddBackgroundComponents(JLayeredPane layeredPane)
     {
-        
-        
 	drawpane = new JLabel();
 	drawpane.setIcon(backgroundImg);
         
         drawpane.setBounds(0, 0, framewidth, frameheight);
         layeredPane.add(drawpane, JLayeredPane.DEFAULT_LAYER);
-        
     }
     
     public void AddCheckboxComponents(JLayeredPane layeredPane)
@@ -129,7 +126,7 @@ class Setting {
             tb[i].setFocusable(false);
             tb[i].setFont(new Font(" ", Font.BOLD, 20));
             
-            final int index = i+2;
+            final int index = i;
             
             tb[i].addActionListener(new ActionListener() {
                 @Override
@@ -157,7 +154,6 @@ class Setting {
     
     public void AddComboComponents(JLayeredPane layeredPane)
     {
-        
         //Blank = new MyImageIcon(MyConstants.FILE_BLANK );
         
         JPanel cbpanel = new JPanel();
@@ -168,7 +164,6 @@ class Setting {
         {
             items[i] = "Background "+(i+1);
         }
-        
         
         combo = new JComboBox( items );
         combo.setFont(new Font("Athiti", Font.PLAIN, 20));
@@ -238,15 +233,12 @@ class Setting {
         
         slpanel.add(slider);
         slpanel.add(Box.createRigidArea(new Dimension(10, 0)));
-        //slpanel.add(valueLabel);
         slpanel.setBounds(150, frameheight/2+70 , framewidth, frameheight);
         layeredPane.add(slpanel, JLayeredPane.MODAL_LAYER);
     }
     
     public void AddButtonComponents(JLayeredPane layeredPane)
     {
-        //contentpane = (JPanel)getContentPane();
-        
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         buttonPanel.setOpaque(false);
@@ -263,7 +255,6 @@ class Setting {
         buttonPanel.add(backButton);
         buttonPanel.setBounds(0, frameheight-200, framewidth, 350);  // Position buttons
         layeredPane.add(buttonPanel, JLayeredPane.MODAL_LAYER);
-        
         
     }
     
