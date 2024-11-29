@@ -105,51 +105,6 @@ public class GFrame extends JFrame {
 
         setHeartPanel();
 
-        // ADD timer start countdown
-        JLabel timerLabel = new JLabel("00:00");
-        timerLabel.setFont(new Font("Arial", Font.PLAIN, 24));
-        timerLabel.setForeground(Color.BLACK);
-        timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-
-        int chooseTime; 
-        int difficulty = sSetting.diffget();
-        System.out.printf("difficulty = %d\n", difficulty);
-        if (difficulty == 5) {
-            chooseTime = 0; // For Endless mode(time start at 0)
-        } else {
-            chooseTime = 60; // For other mode(time start at 60)
-        }
-
-        countdownTimer = new javax.swing.Timer(1000, new ActionListener() {
-            int timeLeft = chooseTime;
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int minutes = timeLeft / 60;
-                int seconds = timeLeft % 60;
-                
-                if (!flag && GameRunning) {  
-                    // Update the timer label with the remaining time
-                    timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
-
-                    // Decrement the countdown
-                    if (difficulty == 5) { // Endless mode
-                        timeLeft++;
-                    }
-                    
-                    else if (timeLeft > 0) {
-                        timeLeft--;
-                    } else {
-                        // Timer runs out, stop the countdown and perform an action
-                        ((javax.swing.Timer) e.getSource()).stop();
-                        System.out.println("Time's up!");
-                        GameOver(sSetting.diffget()); 
-                    }
-                }
-            }
-        });
-        countdownTimer.start(); // Start the countdown timer
-
         JButton moveButton = new JButton("Back To Menu");
         moveButton.addActionListener(new ActionListener() {
             @Override
@@ -161,7 +116,8 @@ public class GFrame extends JFrame {
                 game.openMenu();
             }
         });
-
+        JLabel timerLabel = setupCountdownTimer();
+        
         score = new JTextField("0", 5);
         score.setEditable(false);
         JPanel ScorePanel = new JPanel();
@@ -222,7 +178,7 @@ public class GFrame extends JFrame {
                 if (!flag) {
                     themeSound.playLoop();
                 }
-                setBulletThread();
+                //setBulletThread();
 
                 while (GameRunning) {
 
@@ -261,7 +217,7 @@ public class GFrame extends JFrame {
             } else {
                 xPos = rand.nextInt(farLeft, farRight); // Random x position
             }
-            yPos = (charLabel.getCharCurY() + 70) - ((35 * difficulty) *i); // Random y position
+            yPos = (charLabel.getCharCurY() + 70) - ((34 * difficulty) *i); // Random y position
             Platform newPlatform = new Platform(xPos, yPos, charLabel);
             platforms.add(newPlatform);
             drawpane.add(newPlatform);
@@ -365,6 +321,54 @@ public class GFrame extends JFrame {
         BulletFallThread.start();
 
     }
+    
+    public JLabel setupCountdownTimer(){
+        // ADD timer start countdown
+        JLabel timerLabel = new JLabel("00:00");
+        timerLabel.setFont(new Font("Arial", Font.PLAIN, 24));
+        timerLabel.setForeground(Color.BLACK);
+        timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+
+        int chooseTime; 
+        int difficulty = sSetting.diffget();
+        System.out.printf("difficulty = %d\n", difficulty);
+        if (difficulty == 5) {
+            chooseTime = 0; // For Endless mode(time start at 0)
+        } else {
+            chooseTime = 60; // For other mode(time start at 60)
+        }
+
+        countdownTimer = new javax.swing.Timer(1000, new ActionListener() {
+            int timeLeft = chooseTime;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int minutes = timeLeft / 60;
+                int seconds = timeLeft % 60;
+                
+                if (!flag && GameRunning) {  
+                    // Update the timer label with the remaining time
+                    timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
+
+                    // Decrement the countdown
+                    if (difficulty == 5) { // Endless mode
+                        timeLeft++;
+                    }
+                    
+                    else if (timeLeft > 0) {
+                        timeLeft--;
+                    } else {
+                        // Timer runs out, stop the countdown and perform an action
+                        ((javax.swing.Timer) e.getSource()).stop();
+                        System.out.println("Time's up!");
+                        GameOver(sSetting.diffget()); 
+                    }
+                }
+            }
+        });
+        countdownTimer.start();
+        return timerLabel;
+    }
 
     public synchronized void UpdateScore(int count) {
         CountScore += count;
@@ -448,6 +452,7 @@ public class GFrame extends JFrame {
             System.out.println("Updated heart display to HP: " + hp);
         }
     }
+    
 }
 
 class KeyBoardControl implements KeyListener {
