@@ -46,12 +46,11 @@ class Setting {
     
     public JPanel createSetting()
     {
-        JPanel settingPanel = new JPanel(new BorderLayout()); // Main panel with BorderLayout
-        JLayeredPane layeredPane = new JLayeredPane();        // Layered pane for components
-        layeredPane.setLayout(null);                         // Set null layout for manual positioning
+        JPanel settingPanel = new JPanel(new BorderLayout());
+        JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane.setLayout(null);
         settingPanel.add(layeredPane, BorderLayout.CENTER);
 
-        // Apply Look and Feel
         try {
             String look4 = "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel";
             UIManager.setLookAndFeel(look4);
@@ -67,7 +66,6 @@ class Setting {
         AddSliderComponents(layeredPane);
         AddButtonComponents(layeredPane);
 
-        // Validate the panel
         settingPanel.validate();
         return settingPanel;
     }
@@ -78,7 +76,7 @@ class Setting {
 	stpane = new JLabel();
 	stpane.setIcon(settingIn);
         
-        int drawpaneWidth = stpane.getPreferredSize().width;  // Replace with actual size if fixed
+        int drawpaneWidth = stpane.getPreferredSize().width;
         int drawpaneHeight = stpane.getPreferredSize().height;
         
         int x = (framewidth - drawpaneWidth) / 2;
@@ -101,6 +99,7 @@ class Setting {
     public void AddCheckboxComponents(JLayeredPane layeredPane)
     {
         String [] items = new String[5];
+        
 	items[0] = "Easy  ";
 	items[1] = "Normal  ";
 	items[2] = "Hard  ";
@@ -131,7 +130,6 @@ class Setting {
             tb[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("Selected option: " + index);
                 sSetting.diffset(index);
                 }
             });
@@ -154,7 +152,6 @@ class Setting {
     
     public void AddComboComponents(JLayeredPane layeredPane)
     {
-        //Blank = new MyImageIcon(MyConstants.FILE_BLANK );
         
         JPanel cbpanel = new JPanel();
         cbpanel.setOpaque(false);
@@ -173,30 +170,23 @@ class Setting {
 
             String selectedImage = (String) combo.getSelectedItem();
 
-            // Change background image based on selection
             switch (selectedImage) {
                 case "Background 1":
-                    System.out.println("Background 1");
                     ChangeBG(0);
                     break;
                 case "Background 2":
-                    System.out.println("Background 2");
                     ChangeBG(1);
                     break;
                 case "Background 3":
-                    System.out.println("Background 3");
                     ChangeBG(2);
                     break;
                 case "Background 4":
-                    System.out.println("Background 4");
                     ChangeBG(3);
                     break;
                 case "Background 5":
-                    System.out.println("Background 5");
                     ChangeBG(4);
                     break;
                 default:
-                    System.out.println(e + " button clicked!");; // No background
                     break;
             }
         });
@@ -214,20 +204,19 @@ class Setting {
         
         int volumetemp = (int)game.getThemeSound().getVolume();
         
-        JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 100, volumetemp);  // (min, max, initial value)
+        JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 100, volumetemp);
 
-        // Optionally, set tick marks and labels
         slider.setPreferredSize(new Dimension(300, 100));
         slider.setOpaque(false);
-        slider.setPaintTicks(false);      // Show tick marks
-        slider.setPaintLabels(false);    // Show labels for major ticks
+        slider.setPaintTicks(false);
+        slider.setPaintLabels(false);
         slider.setFocusable(false);
 
         slider.addChangeListener(e -> {
             int volume = slider.getValue();
             sSetting.setSound(volume);
             if (game != null && game.getThemeSound() != null) {
-            game.getThemeSound().setVolume(sSetting.getSound()/100f);  // Assuming game has a method getThemeSound()
+            game.getThemeSound().setVolume(sSetting.getSound()/100f);
         }
         });
         
@@ -253,7 +242,7 @@ class Setting {
         });
         
         buttonPanel.add(backButton);
-        buttonPanel.setBounds(0, frameheight-200, framewidth, 350);  // Position buttons
+        buttonPanel.setBounds(0, frameheight-200, framewidth, 350);
         layeredPane.add(buttonPanel, JLayeredPane.MODAL_LAYER);
         
     }
@@ -285,27 +274,25 @@ class Setting {
         button.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
-            // Change the button's image when pressed
             if(size=="large")
             pressedIcon = new MyImageIcon(text.replace(".png", "_PRESSED.png")).resize(btwidth, btheight);
             else pressedIcon = new MyImageIcon(text.replace(".png", "_PRESSED.png")).resize(smallbtwidth, btheight);
-            button.setIcon(pressedIcon);  // Set the new image when button is pressed
+            button.setIcon(pressedIcon);
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            // Restore the original image when released
             if(size=="large")
             releasedIcon = new MyImageIcon(text).resize(btwidth, btheight);
             else releasedIcon = new MyImageIcon(text).resize(smallbtwidth, btheight);
-            button.setIcon(releasedIcon);  // Restore the original image
+            button.setIcon(releasedIcon);
         }
     });
         
         return button;
     }
     
-    private void ChangeBG(int i){
+    public void ChangeBG(int i){
         sSetting.picnoset(i);
         bgn = sSetting.picnoget();
         backgroundImg = new MyImageIcon(MyConstants.FILE_BG[bgn]).

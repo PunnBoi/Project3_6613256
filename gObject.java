@@ -36,7 +36,6 @@ class CharLabel extends JLabel {
     private GFrame parent;
     private JLabel ppanel;
     private JLabel GroundCheck;
-    private Object gFrame;
 
     public CharLabel(GFrame p, JLabel pp) {
         idleImgR = new MyImageIcon(MyConstants.FILE_CHAR_IDLE_R).resize(width, height);
@@ -125,7 +124,7 @@ class CharLabel extends JLabel {
                     dirY = 1;
                     gcheck = true;
                     falling=true;
-                } // end run
+                }
             };
             wait.start();
         }
@@ -133,7 +132,6 @@ class CharLabel extends JLabel {
     }
 
     public void move() {
-        // FIX GRAVITY PROBLEM(might use another method to check the gravity alone).
         if(callJump&&grounded){
             callJump=false;
             jump();
@@ -146,7 +144,6 @@ class CharLabel extends JLabel {
             curX = MyConstants.FRAMEWIDTH - width;
         }
 
-        // Apply gravity and check for platform collisions
         if (!grounded) {
             if(u>Jpow)u=Jpow;
             curY += dirY * u;
@@ -156,7 +153,6 @@ class CharLabel extends JLabel {
             falling=false;
             u=0;
         }
-        // check whether char touching anything
         if (!isIntersectingWithAny(this, ppanel)) {
             if (curY + height >= MyConstants.FRAMEHEIGHT) {
                 parent.GameOver(-1);
@@ -176,12 +172,10 @@ class CharLabel extends JLabel {
     private static boolean isIntersectingWithAny(JLabel label, JLabel panel) {
 
         for (Component component : panel.getComponents()) {
-            // Skip checking the label against itself
             if (component == label) {
                 continue;
             }
 
-            // Check intersection with other component bounds
             if ((label.getBounds()).intersects(component.getBounds())) {
                 return true;
             }
@@ -241,7 +235,6 @@ class CharLabel extends JLabel {
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
 class Bullet extends JLabel {
 
     private int curX, curY = 0, speed = 7;
@@ -283,7 +276,6 @@ class Bullet extends JLabel {
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
 class Platform extends JLabel {
 
     private int curX, curY;
@@ -291,6 +283,7 @@ class Platform extends JLabel {
     private int speed = 1;
     private boolean isActive;
     private boolean isVisit= false;
+    private MyImageIcon PlatformImg;
     private CharLabel character;
 
     public Platform(int x, int y, CharLabel Char) {
@@ -298,9 +291,10 @@ class Platform extends JLabel {
         this.curY = y;
         this.character = Char;
 
-        // Set platform image
-        setOpaque(true);
-        setBackground(Color.LIGHT_GRAY);
+        PlatformImg = new MyImageIcon(MyConstants.FILE_PLATFORM).resize(width, height);
+        setOpaque(false);
+        setIcon(PlatformImg);
+        //setBackground(Color.LIGHT_GRAY);
 
         setBounds(curX, curY, width, height);
     }
@@ -349,5 +343,4 @@ class Platform extends JLabel {
     }
 }
 
-// Create a ground class for the start of the game
 

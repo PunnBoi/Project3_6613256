@@ -8,10 +8,10 @@ package Project3_6613256;
  */
 
 public class Game {
+    
     private GFrame gWindow;
     private MainApplication menu = null;
     
-    private static int mSound;
     private MySoundEffect themeSound = new MySoundEffect(MyConstants.sFILE_THEME[0]);
     
     public static void main(String[] args) {
@@ -48,6 +48,7 @@ public class Game {
     }
     
     public void changeThemeSound() {
+        
         if (themeSound != null) {
             themeSound.stop();
         }

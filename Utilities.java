@@ -1,34 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Project3_6613256;
 
-/**
- *
- * @author User
- */
 import java.awt.Image;
 import javax.swing.*;
-import javax.sound.sampled.*;     // for sounds
+import javax.sound.sampled.*;
 
 
-// Interface for keeping constant values
 interface MyConstants
 {
-    //----- Resource files
-    //      Don't forget to change path
     static final String PATH                            = "src/main/java/Project3_6613256/resources/";
-    //static final String FILE_SAMPLE          = PATH + "Example.jpg";
     
     
     static final String FILE_BG[] = {
-        PATH + "gBG.jpg",
+        PATH + "dfBG.jpg",
         PATH + "background2.gif",
         PATH + "background3.gif",
         PATH + "background4.gif",
         PATH + "background5.gif",
-        PATH + "backgroundC.jpg"
+        PATH + "CHIPI_BG.gif"
     };
     
     static final String FILE_TTRCOMPO[] = {
@@ -50,8 +38,6 @@ interface MyConstants
     static final String FILE_SETTING_BG                 = PATH + "SETTING_BG.png";
     static final String FILE_TUTORIAL_BG                 = PATH + "TUTORIAL_BG.png";
     static final String FILE_TUTORIAL_BG1                 = PATH + "TTR.png";
-    
-    static final String FILE_BUTTON1                    = PATH + "pixil-frame-0.png";
     
     static final String FILE_TITLE                    = PATH + "TITLE.png";
     
@@ -87,10 +73,9 @@ interface MyConstants
     static final String FILE_HEART_1                    = PATH + "heart_1.png";
     static final String FILE_HEART_2                    = PATH + "heart_2.png";
     static final String FILE_HEART_3                    = PATH + "heart_3.png";
+    static final String FILE_PLATFORM                   = PATH + "platform.png";
     
-    //static final String FILE_SOUND       = PATH + "sound.wav";
-    static final String sFILE_THEME[]                   =
-    {
+    static final String sFILE_THEME[] = {
         PATH + "theme.wav",
         PATH + "CHIPI.wav"
     };
@@ -109,8 +94,6 @@ interface MyConstants
     static final int BULLHEIGHT  = 40;
 }
 
-
-// Auxiliary class to resize image
 class MyImageIcon extends ImageIcon
 {
     public MyImageIcon(String fname)  { super(fname); }
@@ -119,14 +102,11 @@ class MyImageIcon extends ImageIcon
     public MyImageIcon resize(int width, int height)
     {
 	Image oldimg = this.getImage();
-        // Use SCALE_DEFAULT mode to support gif
 	Image newimg = oldimg.getScaledInstance(width, height, java.awt.Image.SCALE_DEFAULT);
         return new MyImageIcon(newimg);
     }
 }
 
-
-// Auxiliary class to play sound effect (support .wav or .mid file)
 class MySoundEffect
 {
     private Clip         clip;
@@ -189,6 +169,7 @@ abstract class sSetting
     }
     
     static public void setSound(float a){
+        
         MasterSound=a;
     }
     

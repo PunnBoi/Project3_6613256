@@ -54,12 +54,9 @@ class MainApplication extends JFrame {
     {
         JPanel menuPanel = new JPanel(new BorderLayout());
 
-        // Create the layered pane for the menu panel
         JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setLayout(null); // Allows manual positioning of components
         menuPanel.add(layeredPane, BorderLayout.CENTER);
 
-        // Add components to the layered pane
         AddBackgroundComponents(layeredPane);
         AddTitleComponents(layeredPane);
         AddButtonComponents(layeredPane);
@@ -112,7 +109,7 @@ class MainApplication extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 setFocusable(false);
-                game.openGame(); // To start the game.
+                game.openGame();
             }
         });
 
@@ -147,7 +144,7 @@ class MainApplication extends JFrame {
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         buttonPanel.add(exitButton);
 
-        buttonPanel.setBounds(0, frameheight / 2 + 30, framewidth, 350);  // Position buttons
+        buttonPanel.setBounds(0, frameheight / 2 + 30, framewidth, 350);
         layeredPane.add(buttonPanel, JLayeredPane.MODAL_LAYER);
 
         validate();
@@ -155,6 +152,8 @@ class MainApplication extends JFrame {
     }
     
     public void AddJTextComponents(JLayeredPane layeredPane){
+        
+        set = new Setting(game, cardLayout, contentpane);
         
         JPanel panel = new JPanel();
         panel.setOpaque(false);
@@ -189,9 +188,7 @@ class MainApplication extends JFrame {
         public void actionPerformed(ActionEvent e) {
             String input = textField.getText();
 
-            // Validate input
             if (input.isEmpty() || input.equals(placeholder)) {
-                // Show dialog for invalid input
                 JOptionPane.showMessageDialog(
                     null,
                     "Please Enter Correct Input",
@@ -199,9 +196,8 @@ class MainApplication extends JFrame {
                     JOptionPane.INFORMATION_MESSAGE
                 );
                 textField.setForeground(Color.GRAY);
-                textField.setText(placeholder); // Reset to placeholder
+                textField.setText(placeholder);
             } else {
-                // Handle specific inputs
                 switch (input.toLowerCase()) {
                     case "credit":
                         JOptionPane.showMessageDialog(null,
@@ -212,14 +208,13 @@ class MainApplication extends JFrame {
                         break;
 
                     case "car":
-                        System.out.println("car");
                         sSetting.picnoset(5);
                         game.changeThemeSound();
+                        set.ChangeBG(5);
+                        int x = sSetting.picnoget();
                         break;
 
                     default:
-                        // Handle other inputs
-                        System.out.println("Unrecognized command: " + input);
                         JOptionPane.showMessageDialog(
                             null,
                             "Unrecognized input: " + input,
