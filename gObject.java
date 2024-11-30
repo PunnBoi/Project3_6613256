@@ -282,12 +282,10 @@ class Platform extends JLabel {
     public Platform(int x, int y, CharLabel Char) {
         this.curX = x;
         this.curY = y;
-        this.character = Char;
 
         PlatformImg = new MyImageIcon(MyConstants.FILE_PLATFORM).resize(width, height);
         setOpaque(false);
         setIcon(PlatformImg);
-        //setBackground(Color.LIGHT_GRAY);
 
         setBounds(curX, curY, width, height);
     }
