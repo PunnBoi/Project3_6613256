@@ -71,12 +71,6 @@ class CharLabel extends JLabel {
     
     public JLabel getGCheck() { return GroundCheck; }//for when check the floor
 
-    public void repositionY(int y) { curY = y; }
-    
-    public void setSpeed(int s) { speed = s; }
-
-    public void setMove(boolean m) { move = m; }
-
     public void setSprite() {
         //make sprite turn left/right
         if (right) {
