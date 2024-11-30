@@ -278,7 +278,6 @@ class Platform extends JLabel {
     private boolean isActive;
     private boolean isVisit= false;
     private MyImageIcon PlatformImg;
-    private CharLabel character;
 
     public Platform(int x, int y, CharLabel Char) {
         this.curX = x;
@@ -328,13 +327,6 @@ class Platform extends JLabel {
         return curY;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
 }
 
 
