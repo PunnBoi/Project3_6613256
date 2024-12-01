@@ -50,7 +50,7 @@ public class GFrame extends JFrame {
     public GFrame(Game g) {
         requestFocusInWindow();
         game = g;
-        setTitle("Test Game");
+        setTitle("Reach the Sky");
         setSize(framewidth, frameheight);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

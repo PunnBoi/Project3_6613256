@@ -22,7 +22,7 @@ class MainApplication extends JFrame {
     
     public MainApplication(Game g) {
         
-        setTitle("Project3");
+        setTitle("Project3: Reach the Sky");
         setSize(framewidth, frameheight);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
